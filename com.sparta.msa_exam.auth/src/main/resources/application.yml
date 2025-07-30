@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: auth-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:19090/eureka/
+
+service:
+  jwt:
+    access-expiration: 3600000
+    secret-key: 16ca8c6449515ecf6940caca7cd0703b869ef838e4101003dc60dd60e2508cf6efc75cfb7b1b07885244b658eb121bdc8e64dcd1db38c16ada57922cc4911acd
+
+server:
+  port: 19095
