@@ -1,0 +1,7 @@
+rootProject.name = 'innovation-msa-shop'
+
+include 'com.sparta.msa_exam'
+include 'com.sparta.msa_exam.auth'
+include 'com.sparta.msa_exam.gateway'
+include 'com.sparta.msa_exam.order'
+include 'com.sparta.msa_exam.product'
