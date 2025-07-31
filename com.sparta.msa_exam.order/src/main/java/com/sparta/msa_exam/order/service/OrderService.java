@@ -21,7 +21,7 @@ public class OrderService {
 
     public SingleOrderResponse createOrder(OrderCreateRequest request) {
         ProductDetailListResponse productDetailListResponse
-                = productClient.checkAndFindAllProducts(new ProductIdListRequest(request.productIds()));
+                = productClient.isExistProducts(new ProductIdListRequest(request.productIds()));
 
         Order order = new Order();
 
@@ -30,6 +30,6 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        return new SingleOrderResponse(order.getId(), productDetailListResponse.products());
+        return new SingleOrderResponse(order.getId(), productDetailListResponse.productIds());
     }
 }

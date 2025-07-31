@@ -1,7 +1,7 @@
 package com.sparta.msa_exam.product.controller;
 
-import com.sparta.msa_exam.product.dto.request.ProductFindListRequest;
-import com.sparta.msa_exam.product.dto.response.ProductFindListResponse;
+import com.sparta.msa_exam.product.dto.request.ProductIdsRequest;
+import com.sparta.msa_exam.product.dto.response.ProductIdsResponse;
 import com.sparta.msa_exam.product.service.InternalProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class InternalProductController {
     private final InternalProductService internalProductService;
 
     @PostMapping
-    public ResponseEntity<ProductFindListResponse> checkAndFindProducts(
-            @RequestBody @Valid ProductFindListRequest productFindListRequest
+    public ResponseEntity<ProductIdsResponse> checkAndFindProducts(
+            @RequestBody @Valid ProductIdsRequest productIdsRequest
     ) {
-        ProductFindListResponse response = internalProductService.checkAndFindProducts(productFindListRequest);
+        ProductIdsResponse response = internalProductService.checkAndFindProducts(productIdsRequest);
 
         return ResponseEntity.ok()
                 .body(response);

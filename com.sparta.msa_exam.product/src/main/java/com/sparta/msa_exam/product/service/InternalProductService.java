@@ -1,9 +1,8 @@
 package com.sparta.msa_exam.product.service;
 
-import com.sparta.msa_exam.product.dto.request.ProductFindListRequest;
-import com.sparta.msa_exam.product.dto.response.ProductFindListResponse;
-import com.sparta.msa_exam.product.dto.response.ProductFindSingleResponse;
-import com.sparta.msa_exam.product.entity.Product;
+import com.sparta.msa_exam.product.dto.request.ProductIdsRequest;
+import com.sparta.msa_exam.product.dto.response.ProductIdsResponse;
+import com.sparta.msa_exam.product.dto.response.SingleProductIdResponse;
 import com.sparta.msa_exam.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,16 +15,20 @@ public class InternalProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductFindListResponse checkAndFindProducts(ProductFindListRequest request) {
-        List<Product> productList = request.productIds().stream()
-                .map(product -> productRepository.findById(product.productId())
-                        .orElseThrow()) // TODO throw Todo NotFound exception
+    public ProductIdsResponse checkAndFindProducts(ProductIdsRequest request) {
+        request.productIds()
+                .forEach(product -> isExistsProductById(product.productId()));
+
+        List<SingleProductIdResponse> productIds = request.productIds().stream()
+                .map(product -> new SingleProductIdResponse(product.productId()))
                 .toList();
 
-        List<ProductFindSingleResponse> products = productList.stream()
-                .map(ProductFindSingleResponse::of)
-                .toList();
+        return new ProductIdsResponse(productIds);
+    }
 
-        return new ProductFindListResponse(products);
+    private void isExistsProductById(Long productId) {
+        if (!productRepository.existsById(productId)) {
+            // TODO throw Product NotFound exception
+        }
     }
 }

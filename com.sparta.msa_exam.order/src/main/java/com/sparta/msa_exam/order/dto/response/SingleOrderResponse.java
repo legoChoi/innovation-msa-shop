@@ -4,6 +4,6 @@ import java.util.List;
 
 public record SingleOrderResponse(
         Long orderId,
-        List<SingleProductDetailResponse> products
+        List<SingleProductIdResponse> productIds
 ) {
 }
