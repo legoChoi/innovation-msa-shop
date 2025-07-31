@@ -2,6 +2,7 @@ package com.sparta.msa_exam.product.controller;
 
 import com.sparta.msa_exam.product.dto.request.ProductCreateRequest;
 import com.sparta.msa_exam.product.dto.response.ProductCreateResponse;
+import com.sparta.msa_exam.product.dto.response.ProductFindListResponse;
 import com.sparta.msa_exam.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +16,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/health")
-    public String healthCheck() {
-        return "Product-Service OK";
-    }
-
     @PostMapping
     public ResponseEntity<ProductCreateResponse> createProduct(
             @RequestBody @Valid ProductCreateRequest productCreateRequest
@@ -27,6 +23,14 @@ public class ProductController {
         ProductCreateResponse response = productService.createProduct(productCreateRequest);
 
         return ResponseEntity.created(null)
+                .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ProductFindListResponse> findAllProducts() {
+        ProductFindListResponse response = productService.findAllProducts();
+
+        return ResponseEntity.ok()
                 .body(response);
     }
 }
