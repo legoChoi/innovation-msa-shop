@@ -1,6 +1,8 @@
 package com.sparta.msa_exam.auth.controller;
 
+import com.sparta.msa_exam.auth.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.dto.request.AuthSignUpRequest;
+import com.sparta.msa_exam.auth.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -17,6 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<AuthSignInResponse> signIn(
+            @RequestBody @Valid AuthSignInRequest authSignInRequest
+    ) {
+        AuthSignInResponse response = authService.signIn(authSignInRequest);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<AuthSignUpResponse> signUp(
