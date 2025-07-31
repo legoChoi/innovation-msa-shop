@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ProductClient {
 
     @PostMapping("/internal/products")
-    ProductDetailListResponse isExistProducts(@RequestBody ProductIdListRequest request);
+    ProductDetailListResponse checkProductsExist(@RequestBody ProductIdListRequest request);
 }
