@@ -2,13 +2,13 @@ package com.sparta.msa_exam.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "order_products")
+
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderProduct {
 
