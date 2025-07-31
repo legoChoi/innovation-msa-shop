@@ -28,7 +28,7 @@ public class InternalProductService {
 
     private void isExistsProductById(Long productId) {
         if (!productRepository.existsById(productId)) {
-            // TODO throw Product NotFound exception
+            throw new RuntimeException("Product NotFound Exception"); // TODO throw Product NotFound exception
         }
     }
 }
