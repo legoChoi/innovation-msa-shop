@@ -1,6 +1,8 @@
 package com.sparta.msa_exam.auth.service;
 
+import com.sparta.msa_exam.auth.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.dto.request.AuthSignUpRequest;
+import com.sparta.msa_exam.auth.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.entity.User;
 import com.sparta.msa_exam.auth.repository.AuthRepository;
@@ -19,10 +21,24 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
+    public AuthSignInResponse signIn(AuthSignInRequest authSignInRequest) {
+        User user = authRepository.findByUsername(authSignInRequest.username())
+                .orElseThrow();// TODO throw User NotFound Exception
+
+        if (!passwordEncoder.matches(authSignInRequest.password(), user.getPassword())) {
+            // TODO throw Password Mismatch Exception
+        }
+
+        String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
+
+        return new AuthSignInResponse(accessToken, refreshToken);
+    }
+
     @Transactional
     public AuthSignUpResponse signUp(AuthSignUpRequest authSignUpRequest) {
         if (authRepository.existsByUsername(authSignUpRequest.username())) {
-            // TODO 중복 username exception
+            // TODO throw Duplicated Username Exception
         }
 
         String encodedPassword = passwordEncoder.encode(authSignUpRequest.password());
