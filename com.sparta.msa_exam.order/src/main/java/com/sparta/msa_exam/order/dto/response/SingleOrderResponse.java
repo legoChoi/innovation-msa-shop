@@ -2,8 +2,8 @@ package com.sparta.msa_exam.order.dto.response;
 
 import java.util.List;
 
-public record OrderCreateResponse(
+public record SingleOrderResponse(
         Long orderId,
-        List<ProductDetailResponse> products
+        List<SingleProductDetailResponse> products
 ) {
 }

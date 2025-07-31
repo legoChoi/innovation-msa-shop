@@ -1,8 +1,9 @@
 package com.sparta.msa_exam.order.service;
 
 import com.sparta.msa_exam.order.dto.request.OrderCreateRequest;
-import com.sparta.msa_exam.order.dto.response.OrderCreateResponse;
-import com.sparta.msa_exam.order.dto.response.ProductListResponse;
+import com.sparta.msa_exam.order.dto.request.ProductIdListRequest;
+import com.sparta.msa_exam.order.dto.response.ProductDetailListResponse;
+import com.sparta.msa_exam.order.dto.response.SingleOrderResponse;
 import com.sparta.msa_exam.order.entity.Order;
 import com.sparta.msa_exam.order.repository.OrderRepository;
 import com.sparta.msa_exam.order.repository.ProductClient;
@@ -18,10 +19,9 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderRepository orderRepository;
 
-    public OrderCreateResponse createOrder(OrderCreateRequest request) {
-        ProductListResponse productListResponse = productClient.checkAndFindAllProducts(request);
-
-        log.info(productListResponse.toString());
+    public SingleOrderResponse createOrder(OrderCreateRequest request) {
+        ProductDetailListResponse productDetailListResponse
+                = productClient.checkAndFindAllProducts(new ProductIdListRequest(request.productIds()));
 
         Order order = new Order();
 
@@ -30,6 +30,6 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        return new OrderCreateResponse(order.getId(), productListResponse.products());
+        return new SingleOrderResponse(order.getId(), productDetailListResponse.products());
     }
 }
