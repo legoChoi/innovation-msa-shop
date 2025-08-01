@@ -11,6 +11,7 @@ import com.sparta.msa_exam.order.repository.OrderRepository;
 import com.sparta.msa_exam.order.repository.ProductClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderRepository orderRepository;
 
+    @Cacheable(value = "order", key = "#orderId")
     public SingleOrderResponse findOrder(Long orderId) {
         Order order = findOrderById(orderId);
 
