@@ -35,9 +35,16 @@ public class OrderService {
         return new SingleOrderResponse(order.getId(), productIds);
     }
 
-    public SingleOrderResponse createOrder(OrderCreateRequest request) {
+    public SingleOrderResponse createOrder(OrderCreateRequest request, Boolean fail) {
+        ProductIdListRequest productIdList = new ProductIdListRequest(request.productIds());
+
+        log.info("isFail? {}", fail);
+        if (Boolean.TRUE.equals(fail)) {
+            productClient.fail();
+        }
+
         ProductDetailListResponse productDetailListResponse
-                = productClient.checkProductsExist(new ProductIdListRequest(request.productIds()));
+                = productClient.checkProductsExist(productIdList);
 
         Order order = new Order();
 

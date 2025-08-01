@@ -6,9 +6,11 @@ import com.sparta.msa_exam.order.dto.response.SingleOrderResponse;
 import com.sparta.msa_exam.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -28,9 +30,10 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<SingleOrderResponse> createOrder(
-            @RequestBody OrderCreateRequest orderCreateRequest
+            @RequestBody OrderCreateRequest orderCreateRequest,
+            @RequestParam(required = false) Boolean fail
     ) {
-        SingleOrderResponse response = orderService.createOrder(orderCreateRequest);
+        SingleOrderResponse response = orderService.createOrder(orderCreateRequest, fail);
 
         return ResponseEntity.created(null)
                 .body(response);
