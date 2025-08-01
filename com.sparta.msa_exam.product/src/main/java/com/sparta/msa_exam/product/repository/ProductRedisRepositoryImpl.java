@@ -12,24 +12,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductRedisRepositoryImpl implements ProductRedisRepository {
 
-    private final RedisTemplate<String, Product> productListRedisTemplate;
+    private final RedisTemplate<String, Product> redisTemplate;
 
     private final String KEY_PREFIX = "products::";
 
     @Override
-    public List<Product> getProductAll() {
-        return productListRedisTemplate.opsForList().range(KEY_PREFIX, 0, -1);
+    public List<Product> getProductList() {
+        return redisTemplate.opsForList().range(KEY_PREFIX, 0, -1);
     }
 
     @Override
-    public void setProductAll(List<Product> productList) {
-        productListRedisTemplate.opsForList().leftPushAll(KEY_PREFIX, productList);
-        productListRedisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
+    public void setProductList(List<Product> productList) {
+        redisTemplate.opsForList().rightPushAll(KEY_PREFIX, productList);
+        redisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
     }
 
     @Override
-    public void addProduct(Product product) {
-        productListRedisTemplate.opsForList().rightPush(KEY_PREFIX, product);
-        productListRedisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
+    public void addProductList(Product product) {
+        redisTemplate.opsForList().rightPush(KEY_PREFIX, product);
+        redisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
     }
 }
