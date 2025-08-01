@@ -1,30 +1,44 @@
 plugins {
     id 'java'
-}
-
-group = 'com'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
+    id 'org.springframework.boot' version '3.5.4' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
 }
 
 subprojects {
+    // plugins
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.sparta.msa_exam'
+    version = '0.0.1-SNAPSHOT'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        set('springCloudVersion', "2025.0.0")
+    }
+
     dependencies {
 
     }
-}
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 
-test {
-    useJUnitPlatform()
-}
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 
-subprojects {
-    group = 'com.sparta.msa_exam'
-    version = '1.0.0'
 }
