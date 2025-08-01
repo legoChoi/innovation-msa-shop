@@ -5,6 +5,7 @@ import com.sparta.msa_exam.auth.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.entity.User;
+import com.sparta.msa_exam.auth.repository.AuthRedisRepository;
 import com.sparta.msa_exam.auth.repository.AuthRepository;
 import com.sparta.msa_exam.auth.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthRepository authRepository;
+    private final AuthRedisRepository authRedisRepository;
 
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
@@ -31,6 +33,8 @@ public class AuthService {
 
         String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
         String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
+
+        authRedisRepository.setRefreshToken(user.getId(), refreshToken);
 
         return new AuthSignInResponse(accessToken, refreshToken);
     }
@@ -48,6 +52,8 @@ public class AuthService {
 
         String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
         String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
+
+        authRedisRepository.setRefreshToken(user.getId(), refreshToken);
 
         return new AuthSignUpResponse(accessToken, refreshToken);
     }
