@@ -6,10 +6,7 @@ import com.sparta.msa_exam.product.service.InternalProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/internal/products")
@@ -17,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class InternalProductController {
 
     private final InternalProductService internalProductService;
+
+    @GetMapping("/internal/products/fail")
+    public void fail() {
+        throw new RuntimeException("service fail");
+    }
 
     @PostMapping
     public ResponseEntity<ProductIdListResponse> checkAndFindProducts(
