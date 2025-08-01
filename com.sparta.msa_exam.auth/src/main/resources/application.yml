@@ -2,26 +2,8 @@ spring:
   application:
     name: auth-service
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/innovation_msa_shop
-    username: root
-    password: chlx159
-
-  data:
-    redis:
-      port: 6379
-      host: localhost
-  #      password: systempass
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: false
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+  profiles:
+    active: dev
 
 eureka:
   client:
@@ -33,6 +15,3 @@ jwt:
   refresh-expiration: 604800000 # 7일
   access: ja0h0ailj90fwfu02jlajlkajdfwoojin8j12ru0faoishf9818hfulajdsf0ashofliwjr189fhliajsdif8oi1hl129rf98ayhouf93qhliasudfhoqi2wu8fh18h9faoif
   refresh: 478223kjaksdf89123laefiauo9832hkr82h82g7goa8sf89o12j48921uohf8ahf893houifya98wyhori3ur98fyhohqahe8f9hf12fasf4aiausdfy8hfoeh8da8f12asf
-
-server:
-  port: 19095
