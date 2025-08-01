@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ProductRedisRepository {
 
-    List<Product> getProductAll();
+    List<Product> getProductList();
 
-    void setProductAll(List<Product> productList);
+    void setProductList(List<Product> productList);
 
-    void addProduct(Product product);
+    void addProductList(Product product);
 }

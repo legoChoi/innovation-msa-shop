@@ -9,6 +9,7 @@ import com.sparta.msa_exam.product.repository.ProductRedisRepository;
 import com.sparta.msa_exam.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,19 +20,22 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductRedisRepository productRedisRepository;
 
+    @Transactional
     public ProductCreateResponse createProduct(ProductCreateRequest request) {
         Product product = new Product(request.name(), request.price());
         productRepository.save(product);
+
+        productRedisRepository.addProductList(product);
 
         return new ProductCreateResponse(product.getId(), product.getName(), product.getSupplyPrice());
     }
 
     public ProductFindDetailListResponse findAllProducts() {
-        List<Product> productList = productRedisRepository.getProductAll();
+        List<Product> productList = productRedisRepository.getProductList();
 
         if (productList.isEmpty()) {
             productList = productRepository.findAll();
-            productRedisRepository.setProductAll(productList);
+            productRedisRepository.setProductList(productList);
         }
 
         List<SingleProductDetailResponse> products = productList.stream()
