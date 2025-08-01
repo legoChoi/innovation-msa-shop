@@ -1,24 +1,9 @@
-server:
-  port: 19093
-
 spring:
   application:
     name: product-service
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/innovation_msa_shop
-    username: root
-    password: chlx159
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+  profiles:
+    active: dev
 
 eureka:
   client:
