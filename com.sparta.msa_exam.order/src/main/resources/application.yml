@@ -14,6 +14,11 @@ spring:
       host: localhost
 #      password: systempass
 
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
   jpa:
     hibernate:
       ddl-auto: create
