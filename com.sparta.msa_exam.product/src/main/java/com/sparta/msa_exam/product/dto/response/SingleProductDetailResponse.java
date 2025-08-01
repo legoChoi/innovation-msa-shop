@@ -2,14 +2,14 @@ package com.sparta.msa_exam.product.dto.response;
 
 import com.sparta.msa_exam.product.entity.Product;
 
-public record ProductFindSingleResponse(
+public record SingleProductDetailResponse(
         Long productId,
         String name,
         Integer price
 ) {
 
-    public static ProductFindSingleResponse of(Product product) {
-        return new ProductFindSingleResponse(
+    public static SingleProductDetailResponse of(Product product) {
+        return new SingleProductDetailResponse(
                 product.getId(),
                 product.getName(),
                 product.getSupplyPrice()
