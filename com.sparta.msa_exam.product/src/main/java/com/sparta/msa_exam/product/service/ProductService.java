@@ -2,8 +2,8 @@ package com.sparta.msa_exam.product.service;
 
 import com.sparta.msa_exam.product.dto.request.ProductCreateRequest;
 import com.sparta.msa_exam.product.dto.response.ProductCreateResponse;
-import com.sparta.msa_exam.product.dto.response.ProductFindListResponse;
-import com.sparta.msa_exam.product.dto.response.ProductFindSingleResponse;
+import com.sparta.msa_exam.product.dto.response.ProductFindDetailListResponse;
+import com.sparta.msa_exam.product.dto.response.SingleProductDetailResponse;
 import com.sparta.msa_exam.product.entity.Product;
 import com.sparta.msa_exam.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ public class ProductService {
         return new ProductCreateResponse(product.getId(), product.getName(), product.getSupplyPrice());
     }
 
-    public ProductFindListResponse findAllProducts() {
+    public ProductFindDetailListResponse findAllProducts() {
         List<Product> productList = productRepository.findAll();
 
-        List<ProductFindSingleResponse> products = productList.stream()
-                .map(ProductFindSingleResponse::of)
+        List<SingleProductDetailResponse> products = productList.stream()
+                .map(SingleProductDetailResponse::of)
                 .toList();
 
-        return new ProductFindListResponse(products);
+        return new ProductFindDetailListResponse(products);
     }
 }

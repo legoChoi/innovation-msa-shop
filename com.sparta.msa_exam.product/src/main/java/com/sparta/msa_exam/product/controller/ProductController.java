@@ -2,7 +2,7 @@ package com.sparta.msa_exam.product.controller;
 
 import com.sparta.msa_exam.product.dto.request.ProductCreateRequest;
 import com.sparta.msa_exam.product.dto.response.ProductCreateResponse;
-import com.sparta.msa_exam.product.dto.response.ProductFindListResponse;
+import com.sparta.msa_exam.product.dto.response.ProductFindDetailListResponse;
 import com.sparta.msa_exam.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ProductFindListResponse> findAllProducts() {
-        ProductFindListResponse response = productService.findAllProducts();
+    public ResponseEntity<ProductFindDetailListResponse> findAllProducts() {
+        ProductFindDetailListResponse response = productService.findAllProducts();
 
         return ResponseEntity.ok()
                 .body(response);
