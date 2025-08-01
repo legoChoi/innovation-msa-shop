@@ -1,8 +1,4 @@
 dependencies {
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 	// spring cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

@@ -13,7 +13,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	// mysql
@@ -25,8 +24,5 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
 	// spring cloud
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
