@@ -8,6 +8,12 @@ spring:
     username: root
     password: chlx159
 
+  data:
+    redis:
+      port: 6379
+      host: localhost
+    #      password: systempass
+
   jpa:
     hibernate:
       ddl-auto: none
