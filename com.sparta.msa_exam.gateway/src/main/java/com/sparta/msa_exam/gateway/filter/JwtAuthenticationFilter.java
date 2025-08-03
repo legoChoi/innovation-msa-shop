@@ -24,6 +24,10 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
     private final JwtProvider jwtProvider;
 
+    private final String BEARER_PREFIX = "Bearer ";
+    private final String AUTHORIZATION_HEADER = "Authorization";
+
+    // URI whitelist
     private final List<PathPattern> whiteList = List.of(
             new PathPatternParser().parse("/auth/**")
     );
@@ -31,7 +35,6 @@ public class JwtAuthenticationFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-
         String path = request.getPath().value();
 
         if (isWhiteListed(path)) {
@@ -55,9 +58,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
     }
 
     private String extractToken(ServerHttpRequest request) {
-        String authHeader = request.getHeaders().getFirst("Authorization");
+        String authHeader = request.getHeaders().getFirst(AUTHORIZATION_HEADER);
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
             return authHeader.substring(7);
         }
 

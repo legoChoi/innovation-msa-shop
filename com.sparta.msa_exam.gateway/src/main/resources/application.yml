@@ -16,7 +16,7 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/products/**, /internal/products/**  # /product/**, /internal/products/** 경로로 들어오는 요청을 이 라우트로 처리
+            - Path=/products/**, /internal/products/**
         - id: auth-service
           uri: lb://auth-service
           predicates:

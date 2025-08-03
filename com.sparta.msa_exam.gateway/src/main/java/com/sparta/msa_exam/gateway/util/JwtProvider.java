@@ -26,12 +26,15 @@ public class JwtProvider {
         );
     }
 
+    /**
+     * AccessToken 검증
+     */
     public boolean validateAccessToken(String token) {
         try {
             Claims claims = parseClaims(token, accessSecretKey);
             return claims.getExpiration().after(new Date(System.currentTimeMillis()));
         } catch (Exception e) {
-            log.warn("Error validating access token");
+            log.warn("[validateAccessToken() - fail]");
             return false;
         }
     }
