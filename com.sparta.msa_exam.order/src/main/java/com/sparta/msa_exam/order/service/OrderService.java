@@ -7,6 +7,8 @@ import com.sparta.msa_exam.order.dto.response.ProductDetailListResponse;
 import com.sparta.msa_exam.order.dto.response.SingleOrderResponse;
 import com.sparta.msa_exam.order.dto.response.SingleProductIdResponse;
 import com.sparta.msa_exam.order.entity.Order;
+import com.sparta.msa_exam.order.exception.CustomRuntimeException;
+import com.sparta.msa_exam.order.exception.ExceptionMessage;
 import com.sparta.msa_exam.order.repository.OrderRepository;
 import com.sparta.msa_exam.order.repository.ProductClient;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +26,11 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderRepository orderRepository;
 
-    @Cacheable(value = "order", key = "#orderId")
+    @Cacheable(value = "order", key = "#orderId") // order::{orderId}로 주문 정보 캐싱
     public SingleOrderResponse findOrder(Long orderId) {
         Order order = findOrderById(orderId);
 
+        // 해당 주문에 포함되는 상품 ID 리스트 매핑
         List<SingleProductIdResponse> productIds = order.getOrderProducts().stream()
                 .map(orderProduct -> new SingleProductIdResponse(orderProduct.getProductId()))
                 .toList();
@@ -38,13 +41,12 @@ public class OrderService {
     public SingleOrderResponse createOrder(OrderCreateRequest request, Boolean fail) {
         ProductIdListRequest productIdList = new ProductIdListRequest(request.productIds());
 
-        log.info("isFail? {}", fail);
+        // query parameter fail 값이 true인 경우 product-service unavailable 예외를 던져 서비스에 문제가 생김을 가정
         if (Boolean.TRUE.equals(fail)) {
             productClient.fail();
         }
 
-        ProductDetailListResponse productDetailListResponse
-                = productClient.checkProductsExist(productIdList);
+        ProductDetailListResponse productDetailListResponse = productClient.checkProductsExist(productIdList);
 
         Order order = new Order();
 
@@ -65,6 +67,7 @@ public class OrderService {
 
         order.addOrderProduct(request.productId());
 
+        // 해당 주문에 포함되는 상품 ID 리스트 매핑
         List<SingleProductIdResponse> productIds = order.getOrderProducts().stream()
                 .map(orderProduct -> new SingleProductIdResponse(orderProduct.getProductId()))
                 .toList();
@@ -74,6 +77,6 @@ public class OrderService {
 
     private Order findOrderById(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order NotFound Exception")); // TODO throw Order NotFound exception
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.ORDER_NOT_FOUND));
     }
 }
