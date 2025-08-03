@@ -74,6 +74,6 @@ public class OrderService {
 
     private Order findOrderById(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order NotFound Exception")); // TODO throw Order NotFound exception
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.ORDER_NOT_FOUND));
     }
 }
