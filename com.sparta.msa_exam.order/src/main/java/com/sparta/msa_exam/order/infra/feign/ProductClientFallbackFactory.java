@@ -1,9 +1,9 @@
-package com.sparta.msa_exam.order.repository;
+package com.sparta.msa_exam.order.infra.feign;
 
-import com.sparta.msa_exam.order.dto.request.ProductIdListRequest;
-import com.sparta.msa_exam.order.dto.response.ProductDetailListResponse;
-import com.sparta.msa_exam.order.exception.CustomRuntimeException;
-import com.sparta.msa_exam.order.exception.ExceptionMessage;
+import com.sparta.msa_exam.order.domain.dto.request.ProductIdListRequest;
+import com.sparta.msa_exam.order.domain.dto.response.ProductDetailListResponse;
+import com.sparta.msa_exam.order.common.exception.CustomRuntimeException;
+import com.sparta.msa_exam.order.common.exception.ExceptionMessage;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -23,7 +23,7 @@ public class ProductClientFallbackFactory implements FallbackFactory<ProductClie
             }
 
             @Override
-            public ProductDetailListResponse checkProductsExist(ProductIdListRequest request) {
+            public ProductDetailListResponse validateProductIds(ProductIdListRequest request) {
                 if (cause instanceof FeignException.NotFound) {
                     logging(ExceptionMessage.PRODUCT_NOT_FOUND);
                     throw new CustomRuntimeException(ExceptionMessage.PRODUCT_NOT_FOUND);

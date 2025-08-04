@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.order.dto.response;
+package com.sparta.msa_exam.order.domain.dto.response;
 
 import java.util.List;
 

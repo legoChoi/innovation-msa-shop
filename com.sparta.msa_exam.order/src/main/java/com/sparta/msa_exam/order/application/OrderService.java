@@ -1,16 +1,16 @@
-package com.sparta.msa_exam.order.service;
+package com.sparta.msa_exam.order.application;
 
-import com.sparta.msa_exam.order.dto.request.OrderCreateRequest;
-import com.sparta.msa_exam.order.dto.request.ProductIdListRequest;
-import com.sparta.msa_exam.order.dto.request.SingleProductIdRequest;
-import com.sparta.msa_exam.order.dto.response.ProductDetailListResponse;
-import com.sparta.msa_exam.order.dto.response.SingleOrderResponse;
-import com.sparta.msa_exam.order.dto.response.SingleProductIdResponse;
-import com.sparta.msa_exam.order.entity.Order;
-import com.sparta.msa_exam.order.exception.CustomRuntimeException;
-import com.sparta.msa_exam.order.exception.ExceptionMessage;
-import com.sparta.msa_exam.order.repository.OrderRepository;
-import com.sparta.msa_exam.order.repository.ProductClient;
+import com.sparta.msa_exam.order.domain.dto.request.OrderCreateRequest;
+import com.sparta.msa_exam.order.domain.dto.request.ProductIdListRequest;
+import com.sparta.msa_exam.order.domain.dto.request.SingleProductIdRequest;
+import com.sparta.msa_exam.order.domain.dto.response.ProductDetailListResponse;
+import com.sparta.msa_exam.order.domain.dto.response.SingleOrderResponse;
+import com.sparta.msa_exam.order.domain.dto.response.SingleProductIdResponse;
+import com.sparta.msa_exam.order.domain.entity.Order;
+import com.sparta.msa_exam.order.common.exception.CustomRuntimeException;
+import com.sparta.msa_exam.order.common.exception.ExceptionMessage;
+import com.sparta.msa_exam.order.infra.jpa.OrderJpaRepository;
+import com.sparta.msa_exam.order.infra.feign.ProductClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,7 +24,7 @@ import java.util.List;
 public class OrderService {
 
     private final ProductClient productClient;
-    private final OrderRepository orderRepository;
+    private final OrderJpaRepository orderJpaRepository;
 
     @Cacheable(value = "order", key = "#orderId") // order::{orderId}로 주문 정보 캐싱
     public SingleOrderResponse findOrder(Long orderId) {
@@ -46,14 +46,14 @@ public class OrderService {
             productClient.fail();
         }
 
-        ProductDetailListResponse productDetailListResponse = productClient.checkProductsExist(productIdList);
+        ProductDetailListResponse productDetailListResponse = productClient.validateProductIds(productIdList);
 
         Order order = new Order();
 
         request.productIds()
                 .forEach(product -> order.addOrderProduct(product.productId()));
 
-        orderRepository.save(order);
+        orderJpaRepository.save(order);
 
         return new SingleOrderResponse(order.getId(), productDetailListResponse.productIds());
     }
@@ -61,7 +61,7 @@ public class OrderService {
     public SingleOrderResponse addSingleProduct(Long orderId, SingleProductIdRequest request) {
         Order order = findOrderById(orderId);
 
-        productClient.checkProductsExist(new ProductIdListRequest(
+        productClient.validateProductIds(new ProductIdListRequest(
                 List.of(new SingleProductIdRequest(request.productId())))
         );
 
@@ -76,7 +76,7 @@ public class OrderService {
     }
 
     private Order findOrderById(Long orderId) {
-        return orderRepository.findById(orderId)
+        return orderJpaRepository.findById(orderId)
                 .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.ORDER_NOT_FOUND));
     }
 }

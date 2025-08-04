@@ -1,9 +1,9 @@
-package com.sparta.msa_exam.order.controller;
+package com.sparta.msa_exam.order.presentation;
 
-import com.sparta.msa_exam.order.dto.request.OrderCreateRequest;
-import com.sparta.msa_exam.order.dto.request.SingleProductIdRequest;
-import com.sparta.msa_exam.order.dto.response.SingleOrderResponse;
-import com.sparta.msa_exam.order.service.OrderService;
+import com.sparta.msa_exam.order.domain.dto.request.OrderCreateRequest;
+import com.sparta.msa_exam.order.domain.dto.request.SingleProductIdRequest;
+import com.sparta.msa_exam.order.domain.dto.response.SingleOrderResponse;
+import com.sparta.msa_exam.order.application.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

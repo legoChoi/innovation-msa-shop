@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.order.filter;
+package com.sparta.msa_exam.order.common.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

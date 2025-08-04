@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.order.entity;
+package com.sparta.msa_exam.order.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
