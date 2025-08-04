@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.auth.util;
+package com.sparta.msa_exam.auth.common.util;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

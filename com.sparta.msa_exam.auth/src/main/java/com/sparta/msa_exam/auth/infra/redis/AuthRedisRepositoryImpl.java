@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.auth.repository;
+package com.sparta.msa_exam.auth.infra.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

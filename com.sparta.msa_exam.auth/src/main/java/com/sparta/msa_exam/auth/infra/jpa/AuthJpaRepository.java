@@ -1,11 +1,11 @@
-package com.sparta.msa_exam.auth.repository;
+package com.sparta.msa_exam.auth.infra.jpa;
 
-import com.sparta.msa_exam.auth.entity.User;
+import com.sparta.msa_exam.auth.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AuthRepository extends JpaRepository<User, Long> {
+public interface AuthJpaRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsername(String username);
 

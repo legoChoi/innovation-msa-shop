@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.auth.filter;
+package com.sparta.msa_exam.auth.common.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
