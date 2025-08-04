@@ -17,7 +17,7 @@ public class InternalProductController {
 
     @GetMapping("/internal/products/fail")
     public void fail() {
-        throw new RuntimeException("service fail");
+        internalProductService.fail();
     }
 
     @PostMapping
