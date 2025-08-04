@@ -31,13 +31,16 @@ public class ProductService {
     }
 
     public ProductFindDetailListResponse findAllProducts() {
+        // 캐싱된 상품 목록 확인
         List<Product> productList = productRedisRepository.getProductList();
 
+        // 캐싱된 상품 목록이 존재하지 않으면 DB 조회 후 Redis 캐싱
         if (productList.isEmpty()) {
             productList = productRepository.findAll();
             productRedisRepository.setProductList(productList);
         }
 
+        // SingleProductDetailResponse 매핑
         List<SingleProductDetailResponse> products = productList.stream()
                 .map(SingleProductDetailResponse::of)
                 .toList();
