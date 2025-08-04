@@ -2,7 +2,7 @@ package com.sparta.msa_exam.product.presentation;
 
 import com.sparta.msa_exam.product.domain.dto.request.ProductIdListRequest;
 import com.sparta.msa_exam.product.domain.dto.response.ProductIdListResponse;
-import com.sparta.msa_exam.product.application.InternalProductService;
+import com.sparta.msa_exam.product.application.ProductInternalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/internal/products")
 @RequiredArgsConstructor
-public class InternalProductController {
+public class ProductInternalController {
 
-    private final InternalProductService internalProductService;
+    private final ProductInternalService productInternalService;
 
     @GetMapping("/internal/products/fail")
     public void fail() {
-        internalProductService.fail();
+        productInternalService.fail();
     }
 
     @PostMapping
     public ResponseEntity<ProductIdListResponse> validateProductIds(
             @RequestBody @Valid ProductIdListRequest productIdListRequest
     ) {
-        ProductIdListResponse response = internalProductService.validateProductIds(productIdListRequest);
+        ProductIdListResponse response = productInternalService.validateProductIds(productIdListRequest);
 
         return ResponseEntity.ok()
                 .body(response);
