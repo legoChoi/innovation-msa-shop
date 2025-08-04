@@ -1,7 +1,7 @@
-package com.sparta.msa_exam.order.repository;
+package com.sparta.msa_exam.order.infra.feign;
 
-import com.sparta.msa_exam.order.dto.request.ProductIdListRequest;
-import com.sparta.msa_exam.order.dto.response.ProductDetailListResponse;
+import com.sparta.msa_exam.order.domain.dto.request.ProductIdListRequest;
+import com.sparta.msa_exam.order.domain.dto.response.ProductDetailListResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,5 +20,5 @@ public interface ProductClient {
      * Product Id 무결성 검증
      */
     @PostMapping("/internal/products")
-    ProductDetailListResponse checkProductsExist(@RequestBody ProductIdListRequest request);
+    ProductDetailListResponse validateProductIds(@RequestBody ProductIdListRequest request);
 }

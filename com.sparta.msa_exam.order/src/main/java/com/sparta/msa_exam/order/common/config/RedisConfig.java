@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.order.config;
+package com.sparta.msa_exam.order.common.config;
 
 import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
