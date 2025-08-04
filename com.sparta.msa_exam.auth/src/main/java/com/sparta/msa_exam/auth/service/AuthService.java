@@ -5,6 +5,8 @@ import com.sparta.msa_exam.auth.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.entity.User;
+import com.sparta.msa_exam.auth.exception.CustomRuntimeException;
+import com.sparta.msa_exam.auth.exception.ExceptionMessage;
 import com.sparta.msa_exam.auth.repository.AuthRedisRepository;
 import com.sparta.msa_exam.auth.repository.AuthRepository;
 import com.sparta.msa_exam.auth.util.JwtProvider;
@@ -26,10 +28,10 @@ public class AuthService {
     public AuthSignInResponse signIn(AuthSignInRequest authSignInRequest) {
         // 계정 조회
         User user = authRepository.findByUsername(authSignInRequest.username())
-                .orElseThrow();// TODO throw User NotFound Exception
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS));
 
         if (!passwordEncoder.matches(authSignInRequest.password(), user.getPassword())) {
-            // TODO throw Password Mismatch Exception
+            throw new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS);
         }
 
         String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
@@ -45,7 +47,7 @@ public class AuthService {
     public AuthSignUpResponse signUp(AuthSignUpRequest authSignUpRequest) {
         // 중복 계정 조회
         if (authRepository.existsByUsername(authSignUpRequest.username())) {
-            // TODO throw Duplicated Username Exception
+            throw new CustomRuntimeException(ExceptionMessage.DUPLICATED_USERNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(authSignUpRequest.password());
