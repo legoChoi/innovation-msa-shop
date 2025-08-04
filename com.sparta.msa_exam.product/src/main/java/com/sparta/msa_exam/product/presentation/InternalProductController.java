@@ -1,0 +1,32 @@
+package com.sparta.msa_exam.product.presentation;
+
+import com.sparta.msa_exam.product.domain.dto.request.ProductIdListRequest;
+import com.sparta.msa_exam.product.domain.dto.response.ProductIdListResponse;
+import com.sparta.msa_exam.product.application.InternalProductService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/internal/products")
+@RequiredArgsConstructor
+public class InternalProductController {
+
+    private final InternalProductService internalProductService;
+
+    @GetMapping("/internal/products/fail")
+    public void fail() {
+        internalProductService.fail();
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductIdListResponse> validateProductIds(
+            @RequestBody @Valid ProductIdListRequest productIdListRequest
+    ) {
+        ProductIdListResponse response = internalProductService.validateProductIds(productIdListRequest);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
+}
