@@ -21,10 +21,10 @@ public class InternalProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductIdListResponse> checkAndFindProducts(
+    public ResponseEntity<ProductIdListResponse> validateProductIds(
             @RequestBody @Valid ProductIdListRequest productIdListRequest
     ) {
-        ProductIdListResponse response = internalProductService.checkAndFindProducts(productIdListRequest);
+        ProductIdListResponse response = internalProductService.validateProductIds(productIdListRequest);
 
         return ResponseEntity.ok()
                 .body(response);

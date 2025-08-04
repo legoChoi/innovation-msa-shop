@@ -15,10 +15,12 @@ public class InternalProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductIdListResponse checkAndFindProducts(ProductIdListRequest request) {
+    public ProductIdListResponse validateProductIds(ProductIdListRequest request) {
+        // validate
         request.productIds()
-                .forEach(product -> isExistsProductById(product.productId()));
+                .forEach(product -> existsProductById(product.productId()));
 
+        // SingleProductIdResponse 매핑
         List<SingleProductIdResponse> productIds = request.productIds().stream()
                 .map(product -> new SingleProductIdResponse(product.productId()))
                 .toList();
@@ -26,7 +28,7 @@ public class InternalProductService {
         return new ProductIdListResponse(productIds);
     }
 
-    private void isExistsProductById(Long productId) {
+    private void existsProductById(Long productId) {
         if (!productRepository.existsById(productId)) {
             throw new RuntimeException("Product NotFound Exception"); // TODO throw Product NotFound exception
         }
