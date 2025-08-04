@@ -24,6 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthSignInResponse signIn(AuthSignInRequest authSignInRequest) {
+        // 계정 조회
         User user = authRepository.findByUsername(authSignInRequest.username())
                 .orElseThrow();// TODO throw User NotFound Exception
 
@@ -34,6 +35,7 @@ public class AuthService {
         String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
         String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
 
+        // Redis에 Refresh Token 저장
         authRedisRepository.setRefreshToken(user.getId(), refreshToken);
 
         return new AuthSignInResponse(accessToken, refreshToken);
@@ -41,6 +43,7 @@ public class AuthService {
 
     @Transactional
     public AuthSignUpResponse signUp(AuthSignUpRequest authSignUpRequest) {
+        // 중복 계정 조회
         if (authRepository.existsByUsername(authSignUpRequest.username())) {
             // TODO throw Duplicated Username Exception
         }
@@ -53,6 +56,7 @@ public class AuthService {
         String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
         String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
 
+        // Redis에 Refresh Token 저장
         authRedisRepository.setRefreshToken(user.getId(), refreshToken);
 
         return new AuthSignUpResponse(accessToken, refreshToken);
