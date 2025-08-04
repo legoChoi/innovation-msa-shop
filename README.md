@@ -87,9 +87,15 @@
 
 2. JWT Authentication failed
 
+![authentication-fail](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb4j6Gg%2FbtsPE8H6T8p%2FAAAAAAAAAAAAAAAAAAAAAG-xLWY77GS-ayoVB1Uyk1KHE_49fEo9WaxBRTds-X1b%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DUPhJFXxPDeYgcvCTobuHoLciHdI%253D)
+
 3. Caching
 
 4. split configs - dev/prod
+
+![order-application.yml](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbl8CMT%2FbtsPGlNsUid%2FAAAAAAAAAAAAAAAAAAAAAKMLZ2jvbVjx_0nhi5vdTMSqDp2dmJ6_QzaVJ_SxxhZv%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DeivcKLAnnQeGDu0d2zOuNeirihg%253D)
+![order-application-dev.yml](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fn2LdP%2FbtsPHgrB5IE%2FAAAAAAAAAAAAAAAAAAAAAFtuqnT75krWYU60yKq4qxyWOMPyxj8PWgH1BiLopaPI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DSW2QnWXGyo%252BAHqVBWbK9Bbox6Tc%253D)
+![order-application-prod.yml](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FeGTCSS%2FbtsPIe7LPz6%2FAAAAAAAAAAAAAAAAAAAAAJk17bb3GXLraiebY_EeNC1lXFo0fg4V0b7bFV6foPTE%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DQRy9P1xi43RXIadZWf%252Fx0DAcFAU%253D)
 
 5. Layered Architecture
 
