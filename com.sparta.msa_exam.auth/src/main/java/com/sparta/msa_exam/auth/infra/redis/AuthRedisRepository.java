@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.auth.repository;
+package com.sparta.msa_exam.auth.infra.redis;
 
 public interface AuthRedisRepository {
 

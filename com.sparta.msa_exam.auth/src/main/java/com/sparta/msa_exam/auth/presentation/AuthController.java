@@ -1,10 +1,10 @@
-package com.sparta.msa_exam.auth.controller;
+package com.sparta.msa_exam.auth.presentation;
 
-import com.sparta.msa_exam.auth.dto.request.AuthSignInRequest;
-import com.sparta.msa_exam.auth.dto.request.AuthSignUpRequest;
-import com.sparta.msa_exam.auth.dto.response.AuthSignInResponse;
-import com.sparta.msa_exam.auth.dto.response.AuthSignUpResponse;
-import com.sparta.msa_exam.auth.service.AuthService;
+import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
+import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
+import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
+import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
+import com.sparta.msa_exam.auth.application.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

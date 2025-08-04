@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.auth.exception;
+package com.sparta.msa_exam.auth.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
