@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/auth/sign-up").permitAll()
-                        .requestMatchers("/auth/sign-in").permitAll())
+                        .requestMatchers("/auth/sign-in").permitAll()
+                        .requestMatchers("/auth/reissue").permitAll())
                 .build();
     }
 }

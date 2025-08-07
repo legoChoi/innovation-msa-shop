@@ -1,7 +1,9 @@
 package com.sparta.msa_exam.auth.presentation;
 
+import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
+import com.sparta.msa_exam.auth.domain.dto.response.AuthReissueResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.application.AuthService;
@@ -37,6 +39,16 @@ public class AuthController {
         AuthSignUpResponse response = authService.signUp(authSignUpRequest);
 
         return ResponseEntity.created(null)
+                .body(response);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<AuthReissueResponse> reissue(
+            @RequestBody @Valid AuthReissueRequest authReissueRequest
+    ) {
+        AuthReissueResponse response = authService.regenerateAccessToken(authReissueRequest);
+
+        return ResponseEntity.ok()
                 .body(response);
     }
 }
