@@ -1,19 +1,15 @@
 package com.sparta.msa_exam.auth.application;
 
+import com.sparta.msa_exam.auth.common.exception.CustomRuntimeException;
+import com.sparta.msa_exam.auth.common.exception.ExceptionMessage;
+import com.sparta.msa_exam.auth.common.util.JwtProvider;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
-import com.sparta.msa_exam.auth.domain.dto.response.AuthReissueResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.UserAccountResponse;
-import com.sparta.msa_exam.auth.domain.entity.User;
-import com.sparta.msa_exam.auth.common.exception.CustomRuntimeException;
-import com.sparta.msa_exam.auth.common.exception.ExceptionMessage;
+import com.sparta.msa_exam.auth.domain.dto.request.UserCreateRequest;
+import com.sparta.msa_exam.auth.domain.dto.response.*;
 import com.sparta.msa_exam.auth.infra.feign.UserFeignClient;
 import com.sparta.msa_exam.auth.infra.redis.AuthRedisRepository;
-import com.sparta.msa_exam.auth.infra.jpa.AuthJpaRepository;
-import com.sparta.msa_exam.auth.common.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserFeignClient userFeignClient;
-    private final AuthJpaRepository authJpaRepository;
     private final AuthRedisRepository authRedisRepository;
 
     private final JwtProvider jwtProvider;
@@ -49,21 +44,16 @@ public class AuthService {
 
     @Transactional
     public AuthSignUpResponse signUp(AuthSignUpRequest request) {
-        // 중복 계정 조회
-        if (authJpaRepository.existsByUsername(request.username())) {
-            throw new CustomRuntimeException(ExceptionMessage.DUPLICATED_USERNAME);
-        }
-
         String encodedPassword = passwordEncoder.encode(request.password());
 
-        User user = new User(request.username(), encodedPassword);
-        authJpaRepository.save(user);
+        UserCreateResponse user
+                = userFeignClient.createUser(new UserCreateRequest(request.username(), encodedPassword));
 
-        String accessToken = jwtProvider.generateAccessToken(user.getId());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(user.userId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.userId());
 
         // Redis에 Refresh Token 저장
-        authRedisRepository.setRefreshToken(refreshToken,user.getId());
+        authRedisRepository.setRefreshToken(refreshToken, user.userId());
 
         return new AuthSignUpResponse(accessToken, refreshToken);
     }
@@ -79,10 +69,9 @@ public class AuthService {
         Long userId = authRedisRepository.getRefreshToken(refreshToken)
                 .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.INVALID_TOKEN));
 
-        User user = authJpaRepository.findById(userId)
-                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.USER_NOT_FOUND));
+        UserAccountResponse userAccount = userFeignClient.findUserByIdOrdUsername(userId, null);
 
-        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(userAccount.userId());
 
         return new AuthReissueResponse(accessToken);
     }
