@@ -14,6 +14,21 @@
             <option value="$PROJECT_DIR$/com.sparta.msa_exam.gateway" />
             <option value="$PROJECT_DIR$/com.sparta.msa_exam.order" />
             <option value="$PROJECT_DIR$/com.sparta.msa_exam.product" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.user" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/com.sparta.msa_exam.user" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.auth" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.gateway" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.order" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.product" />
+            <option value="$PROJECT_DIR$/com.sparta.msa_exam.user" />
           </set>
         </option>
       </GradleProjectSettings>
