@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/internal/products")
+@RequestMapping("/feign/products")
 @RequiredArgsConstructor
-public class ProductInternalController {
+public class ProductFeignController {
 
     private final ProductInternalService productInternalService;
 
-    @GetMapping("/internal/products/fail")
+    @GetMapping("/products/fail")
     public void fail() {
         productInternalService.fail();
     }
