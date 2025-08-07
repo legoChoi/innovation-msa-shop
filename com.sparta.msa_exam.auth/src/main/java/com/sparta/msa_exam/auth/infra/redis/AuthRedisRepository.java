@@ -1,6 +1,10 @@
 package com.sparta.msa_exam.auth.infra.redis;
 
+import java.util.Optional;
+
 public interface AuthRedisRepository {
 
-    void setRefreshToken(Long userId, String refreshToken);
+    void setRefreshToken(String refreshToken, Long userId);
+
+    Optional<Long> getRefreshToken(String refreshToken);
 }

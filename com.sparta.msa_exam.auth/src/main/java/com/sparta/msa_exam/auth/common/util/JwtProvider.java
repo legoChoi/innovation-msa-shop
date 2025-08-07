@@ -1,7 +1,10 @@
 package com.sparta.msa_exam.auth.common.util;
 
+import com.sparta.msa_exam.auth.common.exception.CustomRuntimeException;
+import com.sparta.msa_exam.auth.common.exception.ExceptionMessage;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -12,6 +15,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
+    private final RedisTemplate<String, Object> redisTemplate;
     @Value("${jwt.access-expiration}")
     private Long accessExpiration;
 
@@ -23,8 +27,8 @@ public class JwtProvider {
 
     public JwtProvider(
             @Value("${jwt.access}") String accessSecretKey,
-            @Value("${jwt.refresh}") String refreshSecretKey
-    ) {
+            @Value("${jwt.refresh}") String refreshSecretKey,
+            RedisTemplate<String, Object> redisTemplate) {
         this.accessSecretKey = new SecretKeySpec(
                 accessSecretKey.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS512.key().build().getAlgorithm()
@@ -33,23 +37,38 @@ public class JwtProvider {
                 refreshSecretKey.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS512.key().build().getAlgorithm()
         );
+        this.redisTemplate = redisTemplate;
     }
 
-    public String generateAccessToken(String userId) {
+    public String generateAccessToken(Long userId) {
         return Jwts.builder()
-                .claim("userId", userId)
+                .claim("userId", userId.toString())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(accessSecretKey)
                 .compact();
     }
 
-    public String generateRefreshToken(String userId) {
+    public String generateRefreshToken(Long userId) {
         return Jwts.builder()
-                .claim("userId", userId)
+                .claim("userId", userId.toString())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(refreshSecretKey)
                 .compact();
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(refreshSecretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration()
+                    .after(new Date(System.currentTimeMillis()));
+        } catch (Exception e) {
+            throw new CustomRuntimeException(ExceptionMessage.INVALID_TOKEN);
+        }
     }
 }

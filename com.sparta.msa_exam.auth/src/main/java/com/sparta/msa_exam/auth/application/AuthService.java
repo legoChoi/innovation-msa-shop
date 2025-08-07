@@ -1,7 +1,9 @@
 package com.sparta.msa_exam.auth.application;
 
+import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
+import com.sparta.msa_exam.auth.domain.dto.response.AuthReissueResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.domain.entity.User;
@@ -25,42 +27,61 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthSignInResponse signIn(AuthSignInRequest authSignInRequest) {
+    public AuthSignInResponse signIn(AuthSignInRequest request) {
         // 계정 조회
-        User user = authJpaRepository.findByUsername(authSignInRequest.username())
+        User user = authJpaRepository.findByUsername(request.username())
                 .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS));
 
-        if (!passwordEncoder.matches(authSignInRequest.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS);
         }
 
-        String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
 
         // Redis에 Refresh Token 저장
-        authRedisRepository.setRefreshToken(user.getId(), refreshToken);
+        authRedisRepository.setRefreshToken(refreshToken, user.getId());
 
         return new AuthSignInResponse(accessToken, refreshToken);
     }
 
     @Transactional
-    public AuthSignUpResponse signUp(AuthSignUpRequest authSignUpRequest) {
+    public AuthSignUpResponse signUp(AuthSignUpRequest request) {
         // 중복 계정 조회
-        if (authJpaRepository.existsByUsername(authSignUpRequest.username())) {
+        if (authJpaRepository.existsByUsername(request.username())) {
             throw new CustomRuntimeException(ExceptionMessage.DUPLICATED_USERNAME);
         }
 
-        String encodedPassword = passwordEncoder.encode(authSignUpRequest.password());
+        String encodedPassword = passwordEncoder.encode(request.password());
 
-        User user = new User(authSignUpRequest.username(), encodedPassword);
+        User user = new User(request.username(), encodedPassword);
         authJpaRepository.save(user);
 
-        String accessToken = jwtProvider.generateAccessToken(user.getId().toString());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getId().toString());
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
 
         // Redis에 Refresh Token 저장
-        authRedisRepository.setRefreshToken(user.getId(), refreshToken);
+        authRedisRepository.setRefreshToken(refreshToken,user.getId());
 
         return new AuthSignUpResponse(accessToken, refreshToken);
+    }
+
+    public AuthReissueResponse regenerateAccessToken(AuthReissueRequest request) {
+        // validate refresh token
+        String refreshToken = request.refreshToken();
+
+        if (!jwtProvider.validateRefreshToken(refreshToken)) {
+            throw new CustomRuntimeException(ExceptionMessage.INVALID_TOKEN);
+        }
+
+        Long userId = authRedisRepository.getRefreshToken(refreshToken)
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.INVALID_TOKEN));
+
+        User user = authJpaRepository.findById(userId)
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.USER_NOT_FOUND));
+
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+
+        return new AuthReissueResponse(accessToken);
     }
 }
