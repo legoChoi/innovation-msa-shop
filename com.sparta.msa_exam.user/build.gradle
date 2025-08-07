@@ -21,7 +21,7 @@ dependencies {
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	
+
 	// spring cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
@@ -29,3 +29,5 @@ dependencies {
 	implementation 'io.github.openfeign:feign-micrometer'
 	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 }
+
+tasks.register("prepareKotlinBuildScriptModel"){}
