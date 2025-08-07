@@ -6,9 +6,11 @@ import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthReissueResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
+import com.sparta.msa_exam.auth.domain.dto.response.UserAccountResponse;
 import com.sparta.msa_exam.auth.domain.entity.User;
 import com.sparta.msa_exam.auth.common.exception.CustomRuntimeException;
 import com.sparta.msa_exam.auth.common.exception.ExceptionMessage;
+import com.sparta.msa_exam.auth.infra.feign.UserFeignClient;
 import com.sparta.msa_exam.auth.infra.redis.AuthRedisRepository;
 import com.sparta.msa_exam.auth.infra.jpa.AuthJpaRepository;
 import com.sparta.msa_exam.auth.common.util.JwtProvider;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final UserFeignClient userFeignClient;
     private final AuthJpaRepository authJpaRepository;
     private final AuthRedisRepository authRedisRepository;
 
@@ -29,18 +32,17 @@ public class AuthService {
 
     public AuthSignInResponse signIn(AuthSignInRequest request) {
         // 계정 조회
-        User user = authJpaRepository.findByUsername(request.username())
-                .orElseThrow(() -> new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS));
+        UserAccountResponse userAccount = userFeignClient.findUserByIdOrdUsername(null, request.username());
 
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), userAccount.password())) {
             throw new CustomRuntimeException(ExceptionMessage.INVALID_CREDENTIALS);
         }
 
-        String accessToken = jwtProvider.generateAccessToken(user.getId());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(userAccount.userId());
+        String refreshToken = jwtProvider.generateRefreshToken(userAccount.userId());
 
         // Redis에 Refresh Token 저장
-        authRedisRepository.setRefreshToken(refreshToken, user.getId());
+        authRedisRepository.setRefreshToken(refreshToken, userAccount.userId());
 
         return new AuthSignInResponse(accessToken, refreshToken);
     }
