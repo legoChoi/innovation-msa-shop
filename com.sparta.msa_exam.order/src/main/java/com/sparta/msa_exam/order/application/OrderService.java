@@ -10,7 +10,7 @@ import com.sparta.msa_exam.order.domain.entity.Order;
 import com.sparta.msa_exam.order.common.exception.CustomRuntimeException;
 import com.sparta.msa_exam.order.common.exception.ExceptionMessage;
 import com.sparta.msa_exam.order.infra.jpa.OrderJpaRepository;
-import com.sparta.msa_exam.order.infra.feign.ProductClient;
+import com.sparta.msa_exam.order.infra.feign.ProductFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final ProductClient productClient;
+    private final ProductFeignClient productFeignClient;
     private final OrderJpaRepository orderJpaRepository;
 
     @Cacheable(value = "order", key = "#orderId") // order::{orderId}로 주문 정보 캐싱
@@ -43,10 +43,10 @@ public class OrderService {
 
         // query parameter fail 값이 true인 경우 product-service unavailable 예외를 던져 서비스에 문제가 생김을 가정
         if (Boolean.TRUE.equals(fail)) {
-            productClient.fail();
+            productFeignClient.fail();
         }
 
-        ProductDetailListResponse productDetailListResponse = productClient.validateProductIds(productIdList);
+        ProductDetailListResponse productDetailListResponse = productFeignClient.validateProductIds(productIdList);
 
         Order order = new Order();
 
@@ -61,7 +61,7 @@ public class OrderService {
     public SingleOrderResponse addSingleProduct(Long orderId, SingleProductIdRequest request) {
         Order order = findOrderById(orderId);
 
-        productClient.validateProductIds(new ProductIdListRequest(
+        productFeignClient.validateProductIds(new ProductIdListRequest(
                 List.of(new SingleProductIdRequest(request.productId())))
         );
 

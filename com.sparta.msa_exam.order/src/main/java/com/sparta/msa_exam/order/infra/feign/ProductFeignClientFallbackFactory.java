@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ProductClientFallbackFactory implements FallbackFactory<ProductClient> {
+public class ProductFeignClientFallbackFactory implements FallbackFactory<ProductFeignClient> {
 
     @Override
-    public ProductClient create(Throwable cause) {
-        return new ProductClient() {
+    public ProductFeignClient create(Throwable cause) {
+        return new ProductFeignClient() {
             @Override
             public void fail() {
                 logging(ExceptionMessage.PRODUCT_SERVICE_UNAVAILABLE);
