@@ -13,12 +13,12 @@ public interface ProductFeignClient {
     /**
      * 서비스 통신 실패 가정 service unavailable
      */
-    @GetMapping("/internal/products/fail")
+    @GetMapping("/feign/products/fail")
     void fail();
 
     /**
      * Product Id 무결성 검증
      */
-    @PostMapping("/internal/products")
+    @PostMapping("/feign/products")
     ProductDetailListResponse validateProductIds(@RequestBody ProductIdListRequest request);
 }
