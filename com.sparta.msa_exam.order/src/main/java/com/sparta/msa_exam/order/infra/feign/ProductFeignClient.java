@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "product-service", fallbackFactory = ProductClientFallbackFactory.class)
-public interface ProductClient {
+@FeignClient(name = "product-service", fallbackFactory = ProductFeignClientFallbackFactory.class)
+public interface ProductFeignClient {
 
     /**
      * 서비스 통신 실패 가정 service unavailable
