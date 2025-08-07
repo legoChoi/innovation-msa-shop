@@ -12,7 +12,7 @@ spring:
     redis:
       port: 6379
       host: localhost
-    #      password: systempass
+      password: systempass
 
   jpa:
     hibernate:
