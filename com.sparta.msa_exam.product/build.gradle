@@ -29,8 +29,3 @@ dependencies {
 	implementation 'io.github.openfeign:feign-micrometer'
 	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 }
-
-
-tasks.named('test') {
-	useJUnitPlatform()
-}
