@@ -23,16 +23,23 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
-    private String redisHost;
+    private String host;
 
     @Value("${spring.data.redis.port}")
-    private int redisPort;
+    private int port;
 
-//    @Bean
-//    public RedisConnectionFactory redisConnectionFactory() {
-//        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
-//        return new LettuceConnectionFactory(config);
-//    }
+    @Value("${spring.data.redis.password}")
+    private String password;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        redisStandaloneConfiguration.setPassword(password);
+
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
