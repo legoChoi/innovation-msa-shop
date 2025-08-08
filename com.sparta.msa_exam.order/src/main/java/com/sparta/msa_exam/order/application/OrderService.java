@@ -43,10 +43,10 @@ public class OrderService {
 
         // query parameter fail 값이 true인 경우 product-service unavailable 예외를 던져 서비스에 문제가 생김을 가정
         if (Boolean.TRUE.equals(fail)) {
-            productFeignClient.fail();
+            productFeignClient.validateProductIds(productIdList, true);
         }
 
-        ProductDetailListResponse productDetailListResponse = productFeignClient.validateProductIds(productIdList);
+        ProductDetailListResponse productDetailListResponse = productFeignClient.validateProductIds(productIdList, false);
 
         Order order = new Order();
 
@@ -62,7 +62,8 @@ public class OrderService {
         Order order = findOrderById(orderId);
 
         productFeignClient.validateProductIds(new ProductIdListRequest(
-                List.of(new SingleProductIdRequest(request.productId())))
+                List.of(new SingleProductIdRequest(request.productId()))),
+                false
         );
 
         order.addOrderProduct(request.productId());
