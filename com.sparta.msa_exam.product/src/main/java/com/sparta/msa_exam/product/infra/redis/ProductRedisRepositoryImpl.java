@@ -15,21 +15,22 @@ public class ProductRedisRepositoryImpl implements ProductRedisRepository {
     private final RedisTemplate<String, Product> redisTemplate;
 
     private final String KEY_PREFIX = "products::";
+    private final String ALL_KEY = "all";
 
     @Override
     public List<Product> getProductList() {
-        return redisTemplate.opsForList().range(KEY_PREFIX, 0, -1);
+        return redisTemplate.opsForList().range(KEY_PREFIX + ALL_KEY, 0, -1);
     }
 
     @Override
     public void setProductList(List<Product> productList) {
-        redisTemplate.opsForList().rightPushAll(KEY_PREFIX, productList);
-        redisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
+        redisTemplate.opsForList().rightPushAll(KEY_PREFIX + ALL_KEY, productList);
+        redisTemplate.expire(KEY_PREFIX + ALL_KEY, Duration.ofMinutes(10)); // TTL
     }
 
     @Override
     public void addProductList(Product product) {
-        redisTemplate.opsForList().rightPush(KEY_PREFIX, product);
-        redisTemplate.expire(KEY_PREFIX, Duration.ofMinutes(10));
+        redisTemplate.opsForList().rightPush(KEY_PREFIX + ALL_KEY, product);
+        redisTemplate.expire(KEY_PREFIX + ALL_KEY, Duration.ofMinutes(10)); // TTL
     }
 }
