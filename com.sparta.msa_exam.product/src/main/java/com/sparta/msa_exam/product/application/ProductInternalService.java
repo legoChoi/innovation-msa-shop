@@ -17,11 +17,11 @@ public class ProductInternalService {
 
     private final ProductJpaRepository productJpaRepository;
 
-    public void fail() {
-        throw new CustomRuntimeException(ExceptionMessage.PRODUCT_SERVICE_UNAVAILABLE);
-    }
+    public ProductIdListResponse validateProductIds(ProductIdListRequest request, boolean fail) {
+        if (fail) {
+            throw new CustomRuntimeException(ExceptionMessage.PRODUCT_SERVICE_UNAVAILABLE);
+        }
 
-    public ProductIdListResponse validateProductIds(ProductIdListRequest request) {
         // validate
         request.productIds()
                 .forEach(product -> existsProductById(product.productId()));

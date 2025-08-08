@@ -15,16 +15,12 @@ public class ProductFeignController {
 
     private final ProductInternalService productInternalService;
 
-    @GetMapping("/products/fail")
-    public void fail() {
-        productInternalService.fail();
-    }
-
-    @PostMapping
+    @PostMapping("/validation")
     public ResponseEntity<ProductIdListResponse> validateProductIds(
-            @RequestBody @Valid ProductIdListRequest productIdListRequest
+            @RequestBody @Valid ProductIdListRequest productIdListRequest,
+            @RequestParam boolean fail
     ) {
-        ProductIdListResponse response = productInternalService.validateProductIds(productIdListRequest);
+        ProductIdListResponse response = productInternalService.validateProductIds(productIdListRequest, fail);
 
         return ResponseEntity.ok()
                 .body(response);
