@@ -1,5 +1,7 @@
 # MSA
 
+> https://itak.tistory.com/24
+
 ## Services
 
 | Service             | Description             | Skills                                                             | Port         |
@@ -24,10 +26,9 @@
 
 - **Products(Feign)**
 
-| HTTP | Path                 | Description    |
-|------|----------------------|----------------|
-| GET  | /feign/products/fail | 서비스 에러(실패 케이스) |
-| POST | /feign/products      | 상품 정합성 검증      |
+| HTTP | Path                            | Description               |
+|------|---------------------------------|---------------------------|
+| POST | /feign/products/validation?fail | 상품 정합성 검증, 서비스 에러(실패 케이스) |
 
 - **Auth**
 
