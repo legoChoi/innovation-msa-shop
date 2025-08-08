@@ -2,13 +2,14 @@
 
 ## Services
 
-| Service             | Description             | Skills                                    | Port         |
-|---------------------|-------------------------|-------------------------------------------|--------------|
-| **Eureka Server**   | 서비스 등록 및 헬스 체크          | Spring Cloud Netflix Eureka Server        | 19090        |
-| **API Gateway**     | 외부 요청 라우팅, JWT 인증/인가 처리 | Spring Cloud Gateway, JWT                 | 19091        |
-| **Order Service**   | 주문  관리                  | Spring Boot, JPA, MySQL, Redis, OpenFeign | 19092        |
-| **Product Service** | 상품 관리                   | Spring Boot, JPA, MySQL, Redis, OpenFeign | 19093, 19094 |
-| **Auth Service**    | 회원 가입, 로그인              | Spring Boot, JPA, MySQL, Redis, JWT       | 19095        |
+| Service             | Description             | Skills                                                             | Port         |
+|---------------------|-------------------------|--------------------------------------------------------------------|--------------|
+| **Eureka Server**   | 서비스 등록 및 헬스 체크          | Spring Cloud (Netflix Eureka Server, Actuator)                     | 19090        |
+| **API Gateway**     | 외부 요청 라우팅, JWT 인증/인가 처리 | Spring Cloud (Gateway, Actuator), JWT                              | 19091        |
+| **Order Service**   | 주문  관리                  | Spring Cloud (Client, Actuator), OpenFeign, JPA, MySQL, Redis      | 19092        |
+| **Product Service** | 상품 관리                   | Spring Cloud (Client, Actuator), JPA, MySQL, Redis                 | 19093, 19094 |
+| **Auth Service**    | 회원 가입, 로그인              | Spring Cloud (Client, Actuator), OpenFeign, JPA, MySQL, Redis, JWT | 19095        |
+| **User Service**    | 유저 관리                   | Spring Cloud (Client, Actuator), JPA, MySQL                        | 19096        |
 
 ---
 
@@ -21,12 +22,12 @@
 | POST | /products  | 201 CREATED     | 상품 추가       | REQUIRED-#1.1 |
 | GET  | /products  | 200 OK          | 상품 목록 조회    | REQUIRED-#1.2 |
 
-- **Products(Internal)**
+- **Products(Feign)**
 
-| HTTP | Path                     | Description    |
-|------|--------------------------|----------------|
-| GET  | /internal/products/fail  | 서비스 에러(실패 케이스) |
-| POST | /internal/products       | 상품 정합성 검증      |
+| HTTP | Path                 | Description    |
+|------|----------------------|----------------|
+| GET  | /feign/products/fail | 서비스 에러(실패 케이스) |
+| POST | /feign/products      | 상품 정합성 검증      |
 
 - **Auth**
 
@@ -43,6 +44,13 @@
 | POST | /orders?fail      | 503 SERVICE UNAVAILABLE | 주문 추가(실패 케이스) | REQUIRED-#1.4     |
 | PUT  | /orders/{orderId} | 200 OK                  | 주문 상품 추가      | REQUIRED-#1.5, #3 |
 | GET  | /orders/{orderId} | 200 OK                  | 주문 조회         | REQUIRED-#1.6, #4 |
+
+- **Users(Feign)**
+
+| HTTP | Path                         | Description |
+|------|------------------------------|-------------|
+| POST | /feign/users                 | 유저 생성       |
+| GET  | /feign/users?userId&username | 유저 조회       |
 
 
 ---
@@ -83,13 +91,55 @@
 
     ![zipkin-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbk8xFy%2FbtsPFhZsgs2%2FAAAAAAAAAAAAAAAAAAAAANefhSf2IxG0Q97a3GeSYUcvnFgNN_jtGuWBl-gH5NJs%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252BMr5%252FDEJWGTIfBNquFp2u%252FbVGJA%253D)
     ![zipkin-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcWXpaH%2FbtsPGmr27c5%2FAAAAAAAAAAAAAAAAAAAAAEYauQnux9Rk6aZvg6LNrEVQ_8iPwXg5ze0tPSGcnJQ-%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DLJpArVL9wGVUQ0qZi3swBIG82YM%253D)
-    
 
 2. JWT Authentication failed
 
 ![authentication-fail](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb4j6Gg%2FbtsPE8H6T8p%2FAAAAAAAAAAAAAAAAAAAAAG-xLWY77GS-ayoVB1Uyk1KHE_49fEo9WaxBRTds-X1b%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DUPhJFXxPDeYgcvCTobuHoLciHdI%253D)
 
 3. Caching
+- 사용자가 상품 목록 조회 API 요청 시 상품 목록이 캐싱되어 해당 API를 재요청 할 경우 빠른 응답을 반환한다.
+- 사용자가 상품 생성 API 요청 시 캐싱되어 있는 상품 목록에 추가된 상품이 추가로 캐싱.
+
+```
+@Transactional
+public ProductCreateResponse createProduct(ProductCreateRequest request) {
+    Product product = new Product(request.name(), request.price());
+    productJpaRepository.save(product);
+
+    // 캐싱된 상품 목록 확인
+    List<Product> productList = productRedisRepository.getProductList();
+
+    // 캐싱된 상품 목록이 존재하면 상품 목록에 추가된 상품 추가 캐싱
+    if (!productList.isEmpty()) {
+        productRedisRepository.addProductList(product);
+    }
+
+    return new ProductCreateResponse(product.getId(), product.getName(), product.getSupplyPrice());
+}
+
+
+// ProductRedisRepositoryImpl
+
+@Override
+public void addProductList(Product product) {
+    redisTemplate.opsForList().rightPush(KEY_PREFIX + ALL_KEY, product);
+    redisTemplate.expire(KEY_PREFIX + ALL_KEY, Duration.ofMinutes(10));
+}
+```
+- 아무것도 캐싱되어 있지 않았을 때 상품 생성 API 요청시 다음과 같이 캐싱되지 않음.
+
+![caching-3.1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdjzVWU%2FbtsPN4cWzD1%2FAAAAAAAAAAAAAAAAAAAAAD4RIaxhZK0_c8pz-GLUkVxUpruDGeZpcccdBOejiglP%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DG7Cr13mFhtoP0m02kaCmeQu6i9w%253D)
+![caching-3.2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbceWOT%2FbtsPNco0QPT%2FAAAAAAAAAAAAAAAAAAAAADWsCvCBX_espod2hVHn_gRgiBqyauJ1r46uof3jIMuh%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DQAdHZpXDbrBzQwE6IAKULzArXDg%253D)
+
+- 하지만 상품 목록 API 요청을 통해 상품 목록을 캐싱 후 상품 생성 API를 요청 할 경우
+- 다음과 같이 다음과 같이 추가된 상품이 캐싱된 상품 목록에 추가된다.
+
+![caching-3.3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCZFVT%2FbtsPObwmDpn%2FAAAAAAAAAAAAAAAAAAAAAAbaNr35bFAehuuKmMSedf-fyzUBehmbs63n9_mNHEOS%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dmn8JtdTDKchoMdKgqqQxNHR95ec%253D)
+![caching-3.4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FowHLy%2FbtsPN4jIjm6%2FAAAAAAAAAAAAAAAAAAAAAExS5JZtaEh8xumCKplOypuE2n5GNMN6jvmm7ZZa6Q9d%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DLGx9UWqq127fVRGa65mqk%252B4lBsg%253D)
+![caching-3.5](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F2Tp6j%2FbtsPKRfCrCx%2FAAAAAAAAAAAAAAAAAAAAAIQZ15ufcIS2zNQ2hIDv5K_fh3fwJobS0DeILiyYz7cQ%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DYdWxGrJa3RfUjyTwbx3v9GzwjO0%253D)
+![caching-3.6](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbzqHA5%2FbtsPLX0mJeA%2FAAAAAAAAAAAAAAAAAAAAAACPo7hxrBJAL5X1tQwavyscp04iOVHi9vBhsc1NuJP3%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D72xr2iyiDCK9kLQ3Agft2xqODdA%253D)
+
+
 
 4. split configs - dev/prod
 
