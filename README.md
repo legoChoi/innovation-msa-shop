@@ -62,21 +62,18 @@
 
 2. API Response Header
 - GET /orders/{orderID}
-
-    ![2-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcBIzkp%2FbtsPDFsV9fj%2FAAAAAAAAAAAAAAAAAAAAAIkf9txSY_SgE69N_ERmOqhRRhe2uVEVhakTez2uoHAK%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Df7k%252BVJgGdGoFX1F0uwZF5%252BzD6ik%253D)
-    ![2-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FTNI2s%2FbtsPD2ut1a8%2FAAAAAAAAAAAAAAAAAAAAANjOdOSGjiXHo11Y7Ht55Si517pKjV-kxZ0nbnKVG-5y%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dh4FgbJe%252FF4SN4mB73vJ2ST3QuzE%253D)
+![2-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcBIzkp%2FbtsPDFsV9fj%2FAAAAAAAAAAAAAAAAAAAAAIkf9txSY_SgE69N_ERmOqhRRhe2uVEVhakTez2uoHAK%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Df7k%252BVJgGdGoFX1F0uwZF5%252BzD6ik%253D)
+![2-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FTNI2s%2FbtsPD2ut1a8%2FAAAAAAAAAAAAAAAAAAAAANjOdOSGjiXHo11Y7Ht55Si517pKjV-kxZ0nbnKVG-5y%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dh4FgbJe%252FF4SN4mB73vJ2ST3QuzE%253D)
 
 - GET /products
-
-    ![2-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbnGv6J%2FbtsPFC2BxJj%2FAAAAAAAAAAAAAAAAAAAAAAq7Ogrog5m2jpJj9cGiec8A8HqKKlvEDPHjYmaJLlQr%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D8KaIuot%252BuRRNTTRs9o4ET9z5tC4%253D)
-    ![2-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbubaFx%2FbtsPGGpVYkf%2FAAAAAAAAAAAAAAAAAAAAAA8pRfVYmVAW_mYC9e8wB5uQnmi8a7rAOJ8cYUpTBE_4%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D0MhAmFLP1cd6pBIq5Wur9G3fbzU%253D)
+![2-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbnGv6J%2FbtsPFC2BxJj%2FAAAAAAAAAAAAAAAAAAAAAAq7Ogrog5m2jpJj9cGiec8A8HqKKlvEDPHjYmaJLlQr%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D8KaIuot%252BuRRNTTRs9o4ET9z5tC4%253D)
+![2-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbubaFx%2FbtsPGGpVYkf%2FAAAAAAAAAAAAAAAAAAAAAA8pRfVYmVAW_mYC9e8wB5uQnmi8a7rAOJ8cYUpTBE_4%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D0MhAmFLP1cd6pBIq5Wur9G3fbzU%253D)
 
 3. Caching
-
-    ![3-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FUF4nQ%2FbtsPGowdO1f%2FAAAAAAAAAAAAAAAAAAAAAMRDqi5Z8mlgVFC45-Qy3opyzVh_3NtXQnMHbJZ7zwM2%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DOXiARU3arTTtZres1oqbSE2D4x4%253D)
-    ![3-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FciN1lw%2FbtsPHjamBy4%2FAAAAAAAAAAAAAAAAAAAAALtoLvo-Hihyt8-lHfjjkMFIN20ZLYqWSrl-79A6XThP%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DRYYLGDy9Q42HZ%252B1q%252FkHZ0pvPU14%253D)
-    ![3-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7vSPy%2FbtsPE6iXZuU%2FAAAAAAAAAAAAAAAAAAAAAHYBBYnsYJPeqt8fkhTfdJkPcTbDcPaXjczAV-JWYB-C%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252F9b1YyIS0d1XWwOeLsqKcDLBkNQ%253D)
-    ![3-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcAcRL1%2FbtsPDWVHqsN%2FAAAAAAAAAAAAAAAAAAAAAJ46To6AbiZyo2fG8vwtNrs2z7druP3ZruDdTdlT318W%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DK6skxIwxM0IUoK6GFaSsPPRidjY%253D) 
+![3-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FUF4nQ%2FbtsPGowdO1f%2FAAAAAAAAAAAAAAAAAAAAAMRDqi5Z8mlgVFC45-Qy3opyzVh_3NtXQnMHbJZ7zwM2%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DOXiARU3arTTtZres1oqbSE2D4x4%253D)
+![3-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FciN1lw%2FbtsPHjamBy4%2FAAAAAAAAAAAAAAAAAAAAALtoLvo-Hihyt8-lHfjjkMFIN20ZLYqWSrl-79A6XThP%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DRYYLGDy9Q42HZ%252B1q%252FkHZ0pvPU14%253D)
+![3-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7vSPy%2FbtsPE6iXZuU%2FAAAAAAAAAAAAAAAAAAAAAHYBBYnsYJPeqt8fkhTfdJkPcTbDcPaXjczAV-JWYB-C%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252F9b1YyIS0d1XWwOeLsqKcDLBkNQ%253D)
+![3-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcAcRL1%2FbtsPDWVHqsN%2FAAAAAAAAAAAAAAAAAAAAAJ46To6AbiZyo2fG8vwtNrs2z7druP3ZruDdTdlT318W%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DK6skxIwxM0IUoK6GFaSsPPRidjY%253D) 
 
 ---
 
@@ -84,17 +81,14 @@
 
 1. Zipkin
 - POST /orders - success
-
-    ![zipkin-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fzsoqs%2FbtsPFwaRYZf%2FAAAAAAAAAAAAAAAAAAAAAOCEG6xJgLMiiXD7aKvtzu0DSVARVYicaZDEgfTj9pWW%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DyhE0cylosodeU%252BUFzn76WDfFVbY%253D)
-    ![zipkin-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fcz6Bqg%2FbtsPHH3Dggh%2FAAAAAAAAAAAAAAAAAAAAAI7KICj_WH32qGDRgp8MMQOVmG-lTL44gmvRhT-sXd9b%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DH83%252F%252F7kqq1CbCKEJimKAHLnQVCs%253D)
+![zipkin-1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fzsoqs%2FbtsPFwaRYZf%2FAAAAAAAAAAAAAAAAAAAAAOCEG6xJgLMiiXD7aKvtzu0DSVARVYicaZDEgfTj9pWW%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DyhE0cylosodeU%252BUFzn76WDfFVbY%253D)`
+![zipkin-2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fcz6Bqg%2FbtsPHH3Dggh%2FAAAAAAAAAAAAAAAAAAAAAI7KICj_WH32qGDRgp8MMQOVmG-lTL44gmvRhT-sXd9b%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DH83%252F%252F7kqq1CbCKEJimKAHLnQVCs%253D)`
 
 - POST /orders - fail
-
-    ![zipkin-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbk8xFy%2FbtsPFhZsgs2%2FAAAAAAAAAAAAAAAAAAAAANefhSf2IxG0Q97a3GeSYUcvnFgNN_jtGuWBl-gH5NJs%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252BMr5%252FDEJWGTIfBNquFp2u%252FbVGJA%253D)
-    ![zipkin-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcWXpaH%2FbtsPGmr27c5%2FAAAAAAAAAAAAAAAAAAAAAEYauQnux9Rk6aZvg6LNrEVQ_8iPwXg5ze0tPSGcnJQ-%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DLJpArVL9wGVUQ0qZi3swBIG82YM%253D)
+![zipkin-3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbk8xFy%2FbtsPFhZsgs2%2FAAAAAAAAAAAAAAAAAAAAANefhSf2IxG0Q97a3GeSYUcvnFgNN_jtGuWBl-gH5NJs%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252BMr5%252FDEJWGTIfBNquFp2u%252FbVGJA%253D)
+![zipkin-4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcWXpaH%2FbtsPGmr27c5%2FAAAAAAAAAAAAAAAAAAAAAEYauQnux9Rk6aZvg6LNrEVQ_8iPwXg5ze0tPSGcnJQ-%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DLJpArVL9wGVUQ0qZi3swBIG82YM%253D)
 
 2. JWT Authentication failed
-
 ![authentication-fail](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb4j6Gg%2FbtsPE8H6T8p%2FAAAAAAAAAAAAAAAAAAAAAG-xLWY77GS-ayoVB1Uyk1KHE_49fEo9WaxBRTds-X1b%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DUPhJFXxPDeYgcvCTobuHoLciHdI%253D)
 
 3. Caching
@@ -128,13 +122,11 @@ public void addProductList(Product product) {
 }
 ```
 - 아무것도 캐싱되어 있지 않았을 때 상품 생성 API 요청시 다음과 같이 캐싱되지 않음.
-
 ![caching-3.1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdjzVWU%2FbtsPN4cWzD1%2FAAAAAAAAAAAAAAAAAAAAAD4RIaxhZK0_c8pz-GLUkVxUpruDGeZpcccdBOejiglP%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DG7Cr13mFhtoP0m02kaCmeQu6i9w%253D)
 ![caching-3.2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbceWOT%2FbtsPNco0QPT%2FAAAAAAAAAAAAAAAAAAAAADWsCvCBX_espod2hVHn_gRgiBqyauJ1r46uof3jIMuh%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DQAdHZpXDbrBzQwE6IAKULzArXDg%253D)
 
 - 하지만 상품 목록 API 요청을 통해 상품 목록을 캐싱 후 상품 생성 API를 요청 할 경우
 - 다음과 같이 다음과 같이 추가된 상품이 캐싱된 상품 목록에 추가된다.
-
 ![caching-3.3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCZFVT%2FbtsPObwmDpn%2FAAAAAAAAAAAAAAAAAAAAAAbaNr35bFAehuuKmMSedf-fyzUBehmbs63n9_mNHEOS%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dmn8JtdTDKchoMdKgqqQxNHR95ec%253D)
 ![caching-3.4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FowHLy%2FbtsPN4jIjm6%2FAAAAAAAAAAAAAAAAAAAAAExS5JZtaEh8xumCKplOypuE2n5GNMN6jvmm7ZZa6Q9d%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DLGx9UWqq127fVRGa65mqk%252B4lBsg%253D)
 ![caching-3.5](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F2Tp6j%2FbtsPKRfCrCx%2FAAAAAAAAAAAAAAAAAAAAAIQZ15ufcIS2zNQ2hIDv5K_fh3fwJobS0DeILiyYz7cQ%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DYdWxGrJa3RfUjyTwbx3v9GzwjO0%253D)
@@ -151,4 +143,13 @@ public void addProductList(Product product) {
 5. Layered Architecture
 
 6. OpenFeign Fallback
+- Order-Service의 상품 생성시 Feign을 통한 통신시 Product-Service의 응답 코드 별 예외 처리  
+- #1 Product Not Found
+![fallback-6.1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FeB9kil%2FbtsPOpOXAsN%2FAAAAAAAAAAAAAAAAAAAAAHjMzOAdF5uDyzr3smtu5HVgVI6hh47npWSQTawaAj4V%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D9oeL0BgC2Lz88tuwEOhMKs3TLLc%253D)
+![fallback-6.2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcprF5Z%2FbtsPMRrZlel%2FAAAAAAAAAAAAAAAAAAAAADRMVEDjgwMJmbccIZghClCLEwyN_YUu25Uk_Tnl9JAn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3DhT5Vuo5MPSjaa%252F2jrr7CamK0op0%253D)
+![fallback-6.3](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb29V4U%2FbtsPMVumbDx%2FAAAAAAAAAAAAAAAAAAAAAG-siIQp3I-aNog2WVOBoQqDkmOYxqI-9LDEuNO368xf%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dn14%252BE0cW04OSRA%252B7HQL%252BBAD%252BvRU%253D)
 
+- #2 Product Service Unavailable
+![fallback-6.4](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FwbaFK%2FbtsPNl7ncRx%2FAAAAAAAAAAAAAAAAAAAAAEWqU2UBDCHkPRX7IOda4d7aUH8kYrzZAWZWHis6wLuF%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D2UrLtZUIq9Kez9%252BF%252BaSgOu%252Fli7k%253D)
+![fallback-6.5](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F9Q7f7%2FbtsPM1nNsTC%2FAAAAAAAAAAAAAAAAAAAAAIY2UMvMfUYKrlFTqEPARBzisHtWyI44bm9Tf-iUs6U8%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3Dx2aurxvyZxupP7oWa%252FJAu%252BL465s%253D)
+![fallback-6.6](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FssbhC%2FbtsPNPAnfXS%2FAAAAAAAAAAAAAAAAAAAAAOwKdexqquDPk5K0V9AxLN2r2fV-JkVsWfvHgMlW_NE7%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1756652399%26allow_ip%3D%26allow_referer%3D%26signature%3D84KStm7cbJ%252BB1%252FIV5rdlNJYMyWE%253D)
