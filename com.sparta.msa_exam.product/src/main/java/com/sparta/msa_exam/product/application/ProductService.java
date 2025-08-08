@@ -25,7 +25,13 @@ public class ProductService {
         Product product = new Product(request.name(), request.price());
         productJpaRepository.save(product);
 
-        productRedisRepository.addProductList(product);
+        // 캐싱된 상품 목록 확인
+        List<Product> productList = productRedisRepository.getProductList();
+
+        // 캐싱된 상품 목록이 존재하면 상품 목록에 추가된 상품 추가 캐싱
+        if (!productList.isEmpty()) {
+            productRedisRepository.addProductList(product);
+        }
 
         return new ProductCreateResponse(product.getId(), product.getName(), product.getSupplyPrice());
     }
