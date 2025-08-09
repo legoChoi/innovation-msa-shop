@@ -40,6 +40,14 @@ class AuthControllerTest {
 
     MockMvc mockMvc;
 
+    private final Long USER_ID = 1L;
+    private final String USERNAME = "username";
+    private final String PLAIN_PASSWORD = "plain_password";
+    private final String HASHED_PASSWORD = "hashed_password";
+    private final String ACCESS_TOKEN = "access_token";
+    private final String REFRESH_TOKEN = "refresh_token";
+    private final String NEW_ACCESS_TOKEN = "new_access_token";
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders
@@ -57,13 +65,8 @@ class AuthControllerTest {
 
         @BeforeEach
         void init() {
-            String username = "username";
-            String password = "password";
-            String accessToken = "accessToken";
-            String refreshToken = "refreshToken";
-
-            authSignInRequest = new AuthSignInRequest(username, password);
-            authSignInResponse = new AuthSignInResponse(accessToken, refreshToken);
+            authSignInRequest = new AuthSignInRequest(USERNAME, PLAIN_PASSWORD);
+            authSignInResponse = new AuthSignInResponse(ACCESS_TOKEN, REFRESH_TOKEN);
         }
 
         @Test
@@ -106,13 +109,8 @@ class AuthControllerTest {
 
         @BeforeEach
         void init() {
-            String username = "username";
-            String password = "password";
-            String accessToken = "accessToken";
-            String refreshToken = "refreshToken";
-
-            authSignUpRequest = new AuthSignUpRequest(username, password);
-            authSignUpResponse = new AuthSignUpResponse(accessToken, refreshToken);
+            authSignUpRequest = new AuthSignUpRequest(USERNAME, PLAIN_PASSWORD);
+            authSignUpResponse = new AuthSignUpResponse(ACCESS_TOKEN, REFRESH_TOKEN);
         }
 
         @Test
@@ -155,11 +153,8 @@ class AuthControllerTest {
 
         @BeforeEach
         void init() {
-            String accessToken = "accessToken";
-            String refreshToken = "refreshToken";
-
-            authReissueRequest = new AuthReissueRequest(accessToken);
-            authReissueResponse = new AuthReissueResponse(refreshToken);
+            authReissueRequest = new AuthReissueRequest(ACCESS_TOKEN);
+            authReissueResponse = new AuthReissueResponse(NEW_ACCESS_TOKEN);
         }
 
         @Test
