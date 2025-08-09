@@ -93,6 +93,39 @@ class AuthServiceTest {
             verify(authRedisRepository, times(1))
                     .setRefreshToken(refreshToken, userAccountResponse.userId());
         }
+
+        @Test
+        @DisplayName("[실패] - 사용자가 입력한 비밀번호가 암호화된 비밀번호와 일치하지 않는 경우")
+        void passwordMismatch() {
+            // given
+            Long userId = 1L;
+            String username = "username";
+            String plainPassword = "plainPassword";
+            String hashedPassword = "hashedPassword";
+            ExceptionMessage invalidCredentialsException = ExceptionMessage.INVALID_CREDENTIALS;
+
+            AuthSignInRequest authSignInRequest = new AuthSignInRequest(username, plainPassword);
+            UserAccountResponse userAccountResponse
+                    = new UserAccountResponse(userId, authSignInRequest.username(), hashedPassword);
+
+            given(userFeignClient.findUserByIdOrdUsername(null, username))
+                    .willReturn(userAccountResponse);
+            given(passwordEncoder.matches(authSignInRequest.password(), userAccountResponse.password()))
+                    .willReturn(false);
+
+            // when
+            CustomRuntimeException exception = assertThrows(CustomRuntimeException.class,
+                    () -> authService.signIn(authSignInRequest));
+
+            // then
+            assertEquals(invalidCredentialsException.getStatus(), exception.getStatus());
+            assertEquals(invalidCredentialsException.getMessage(), exception.getMessage());
+
+            verify(userFeignClient, times(1))
+                    .findUserByIdOrdUsername(null, authSignInRequest.username());
+            verify(passwordEncoder, times(1))
+                    .matches(authSignInRequest.password(), userAccountResponse.password());
+        }
     }
 
     @Nested
