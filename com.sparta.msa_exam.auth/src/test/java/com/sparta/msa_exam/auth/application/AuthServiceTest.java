@@ -1,5 +1,7 @@
 package com.sparta.msa_exam.auth.application;
 
+import com.sparta.msa_exam.auth.common.exception.CustomRuntimeException;
+import com.sparta.msa_exam.auth.common.exception.ExceptionMessage;
 import com.sparta.msa_exam.auth.common.util.JwtProvider;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
@@ -13,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -25,6 +30,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceTest.class);
     @Mock
     UserFeignClient userFeignClient;
 
@@ -182,6 +188,58 @@ class AuthServiceTest {
                     .findUserByIdOrdUsername(userId, null);
             verify(jwtProvider, times(1))
                     .generateAccessToken(userAccountResponse.userId());
+        }
+
+        @Test
+        @DisplayName("[실패] - 유효하지 않은 refresh token를 전달한 경우")
+        void invalidRefreshToken() {
+            // given
+            String refreshToken = "refreshToken";
+            ExceptionMessage invalidTokenException = ExceptionMessage.INVALID_TOKEN;
+
+            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
+
+            given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
+                    .willReturn(false);
+
+            // when
+            CustomRuntimeException exception = assertThrows(CustomRuntimeException.class,
+                    () -> authService.regenerateAccessToken(authReissueRequest));
+
+            // then
+            verify(jwtProvider, times(1))
+                    .validateRefreshToken(authReissueRequest.refreshToken());
+
+            assertEquals(invalidTokenException.getStatus(), exception.getStatus());
+            assertEquals(invalidTokenException.getMessage(), exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("[실패] - redis 내 refresh token이 존재하지 않는 경우")
+        void notExistsRefreshToken() {
+            // given
+            String refreshToken = "refreshToken";
+            ExceptionMessage invalidTokenException = ExceptionMessage.INVALID_TOKEN;
+
+            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
+
+            given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
+                    .willReturn(true);
+            given(authRedisRepository.getRefreshToken(authReissueRequest.refreshToken()))
+                    .willReturn(Optional.empty());
+
+            // when
+            CustomRuntimeException exception = assertThrows(CustomRuntimeException.class,
+                    () -> authService.regenerateAccessToken(authReissueRequest));
+
+            // then
+            verify(jwtProvider, times(1))
+                    .validateRefreshToken(authReissueRequest.refreshToken());
+            verify(authRedisRepository, times(1))
+                    .getRefreshToken(authReissueRequest.refreshToken());
+
+            assertEquals(invalidTokenException.getStatus(), exception.getStatus());
+            assertEquals(invalidTokenException.getMessage(), exception.getMessage());
         }
     }
 }
