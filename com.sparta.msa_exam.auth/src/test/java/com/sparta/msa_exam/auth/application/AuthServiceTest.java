@@ -1,29 +1,27 @@
 package com.sparta.msa_exam.auth.application;
 
 import com.sparta.msa_exam.auth.common.util.JwtProvider;
+import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.UserCreateRequest;
-import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.UserAccountResponse;
-import com.sparta.msa_exam.auth.domain.dto.response.UserCreateResponse;
+import com.sparta.msa_exam.auth.domain.dto.response.*;
 import com.sparta.msa_exam.auth.infra.feign.UserFeignClient;
 import com.sparta.msa_exam.auth.infra.redis.AuthRedisRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class) // @Nested Class @Order 적용
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
@@ -44,6 +42,7 @@ class AuthServiceTest {
 
     @Nested
     @DisplayName("[POST /auth/sign-in]")
+    @Order(1)
     class SignIn {
 
         @Test
@@ -92,6 +91,7 @@ class AuthServiceTest {
 
     @Nested
     @DisplayName("[POST /auth/sign-up]")
+    @Order(2)
     class SignUp {
 
         @Test
@@ -138,6 +138,50 @@ class AuthServiceTest {
                     .generateRefreshToken(userAccountResponse.userId());
             verify(authRedisRepository, times(1))
                     .setRefreshToken(refreshToken, userAccountResponse.userId());
+        }
+    }
+
+    @Nested
+    @DisplayName("[POST /auth/reissue]")
+    @Order(3)
+    class Reissue {
+
+        @Test
+        @DisplayName("[성공]")
+        void success() {
+            // given
+            Long userId = 1L;
+            String username = "username";
+            String hashedPassword = "hashedPassword";
+            String newAccessToken = "new accessToken";
+            String refreshToken = "refreshToken";
+
+            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
+            UserAccountResponse userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
+
+            given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
+                    .willReturn(true);
+            given(authRedisRepository.getRefreshToken(authReissueRequest.refreshToken()))
+                    .willReturn(Optional.of(userId));
+            given(userFeignClient.findUserByIdOrdUsername(userId, null))
+                    .willReturn(userAccountResponse);
+            given(jwtProvider.generateAccessToken(userAccountResponse.userId()))
+                    .willReturn(newAccessToken);
+
+            // when
+            AuthReissueResponse authReissueResponse = authService.regenerateAccessToken(authReissueRequest);
+
+            // then
+            assertEquals(newAccessToken, authReissueResponse.accessToken());
+
+            verify(jwtProvider, times(1))
+                    .validateRefreshToken(authReissueRequest.refreshToken());
+            verify(authRedisRepository, times(1))
+                    .getRefreshToken(authReissueRequest.refreshToken());
+            verify(userFeignClient, times(1))
+                    .findUserByIdOrdUsername(userId, null);
+            verify(jwtProvider, times(1))
+                    .generateAccessToken(userAccountResponse.userId());
         }
     }
 }
