@@ -40,10 +40,8 @@ class AuthControllerTest {
 
     MockMvc mockMvc;
 
-    private final Long USER_ID = 1L;
     private final String USERNAME = "username";
     private final String PLAIN_PASSWORD = "plain_password";
-    private final String HASHED_PASSWORD = "hashed_password";
     private final String ACCESS_TOKEN = "access_token";
     private final String REFRESH_TOKEN = "refresh_token";
     private final String NEW_ACCESS_TOKEN = "new_access_token";
