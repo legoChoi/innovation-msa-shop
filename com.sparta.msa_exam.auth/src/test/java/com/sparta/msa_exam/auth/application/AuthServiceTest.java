@@ -1,8 +1,10 @@
 package com.sparta.msa_exam.auth.application;
 
 import com.sparta.msa_exam.auth.common.util.JwtProvider;
+import com.sparta.msa_exam.auth.domain.dto.request.AuthSignInRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.domain.dto.request.UserCreateRequest;
+import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.UserAccountResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.UserCreateResponse;
@@ -25,7 +27,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-
     @Mock
     UserFeignClient userFeignClient;
 
@@ -42,6 +43,54 @@ class AuthServiceTest {
     AuthService authService;
 
     @Nested
+    @DisplayName("[POST /auth/sign-in]")
+    class SignIn {
+
+        @Test
+        @DisplayName("[성공]")
+        void success() {
+            // given
+            Long userId = 1L;
+            String username = "username";
+            String plainPassword = "plainPassword";
+            String hashedPassword = "hashedPassword";
+            String accessToken = "accessToken";
+            String refreshToken = "refreshToken";
+
+            AuthSignInRequest authSignInRequest = new AuthSignInRequest(username, plainPassword);
+            UserAccountResponse userAccountResponse
+                    = new UserAccountResponse(userId, authSignInRequest.username(), hashedPassword);
+
+            given(userFeignClient.findUserByIdOrdUsername(null, username))
+                    .willReturn(userAccountResponse);
+            given(passwordEncoder.matches(authSignInRequest.password(), userAccountResponse.password()))
+                    .willReturn(true);
+            given(jwtProvider.generateAccessToken(userAccountResponse.userId()))
+                    .willReturn(accessToken);
+            given(jwtProvider.generateRefreshToken(userAccountResponse.userId()))
+                    .willReturn(refreshToken);
+
+            // when
+            AuthSignInResponse authSignInResponse = authService.signIn(authSignInRequest);
+
+            // then
+            assertEquals(accessToken, authSignInResponse.accessToken());
+            assertEquals(refreshToken, authSignInResponse.refreshToken());
+
+            verify(userFeignClient, times(1))
+                    .findUserByIdOrdUsername(null, authSignInRequest.username());
+            verify(passwordEncoder, times(1))
+                    .matches(authSignInRequest.password(), userAccountResponse.password());
+            verify(jwtProvider, times(1))
+                    .generateAccessToken(userAccountResponse.userId());
+            verify(jwtProvider, times(1))
+                    .generateRefreshToken(userAccountResponse.userId());
+            verify(authRedisRepository, times(1))
+                    .setRefreshToken(refreshToken, userAccountResponse.userId());
+        }
+    }
+
+    @Nested
     @DisplayName("[POST /auth/sign-up]")
     class SignUp {
 
@@ -51,8 +100,8 @@ class AuthServiceTest {
             // given
             Long userId = 1L;
             String username = "username";
-            String hashedPassword = "hashedPassword";
             String plainPassword = "plainPassword";
+            String hashedPassword = "hashedPassword";
             String accessToken = "accessToken";
             String refreshToken = "refreshToken";
 
