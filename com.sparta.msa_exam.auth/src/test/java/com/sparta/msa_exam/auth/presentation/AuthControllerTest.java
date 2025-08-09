@@ -1,6 +1,5 @@
 package com.sparta.msa_exam.auth.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.msa_exam.auth.application.AuthService;
 import com.sparta.msa_exam.auth.domain.dto.request.AuthReissueRequest;
@@ -9,20 +8,17 @@ import com.sparta.msa_exam.auth.domain.dto.request.AuthSignUpRequest;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthReissueResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignInResponse;
 import com.sparta.msa_exam.auth.domain.dto.response.AuthSignUpResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -56,18 +52,24 @@ class AuthControllerTest {
     @DisplayName("[POST /auth/sign-in]")
     class SignIn {
 
-        @Test
-        @DisplayName("[성공]")
-        void success() throws Exception {
-            // given
+        private AuthSignInRequest authSignInRequest;
+        private AuthSignInResponse authSignInResponse;
+
+        @BeforeEach
+        void init() {
             String username = "username";
             String password = "password";
             String accessToken = "accessToken";
             String refreshToken = "refreshToken";
 
-            AuthSignInRequest authSignInRequest = new AuthSignInRequest(username, password);
-            AuthSignInResponse authSignInResponse = new AuthSignInResponse(accessToken, refreshToken);
+            authSignInRequest = new AuthSignInRequest(username, password);
+            authSignInResponse = new AuthSignInResponse(accessToken, refreshToken);
+        }
 
+        @Test
+        @DisplayName("[성공]")
+        void success() throws Exception {
+            // given
             given(authService.signIn(authSignInRequest))
                     .willReturn(authSignInResponse);
 
@@ -99,18 +101,24 @@ class AuthControllerTest {
     @DisplayName("[POST /auth/sign-up]")
     class SignUp {
 
-        @Test
-        @DisplayName("[성공]")
-        void success() throws Exception {
-            // given
+        private AuthSignUpRequest authSignUpRequest;
+        private AuthSignUpResponse authSignUpResponse;
+
+        @BeforeEach
+        void init() {
             String username = "username";
             String password = "password";
             String accessToken = "accessToken";
             String refreshToken = "refreshToken";
 
-            AuthSignUpRequest authSignUpRequest = new AuthSignUpRequest(username, password);
-            AuthSignUpResponse authSignUpResponse = new AuthSignUpResponse(accessToken, refreshToken);
+            authSignUpRequest = new AuthSignUpRequest(username, password);
+            authSignUpResponse = new AuthSignUpResponse(accessToken, refreshToken);
+        }
 
+        @Test
+        @DisplayName("[성공]")
+        void success() throws Exception {
+            // given
             given(authService.signUp(authSignUpRequest))
                     .willReturn(authSignUpResponse);
 
@@ -142,16 +150,22 @@ class AuthControllerTest {
     @DisplayName("[POST /auth/reissue]")
     class Reissue {
 
+        private AuthReissueRequest authReissueRequest;
+        private AuthReissueResponse authReissueResponse;
+
+        @BeforeEach
+        void init() {
+            String accessToken = "accessToken";
+            String refreshToken = "refreshToken";
+
+            authReissueRequest = new AuthReissueRequest(accessToken);
+            authReissueResponse = new AuthReissueResponse(refreshToken);
+        }
+
         @Test
         @DisplayName("[성공]")
         void success() throws Exception {
             // given
-            String accessToken = "accessToken";
-            String refreshToken = "refreshToken";
-
-            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
-            AuthReissueResponse authReissueResponse = new AuthReissueResponse(accessToken);
-
             given(authService.regenerateAccessToken(authReissueRequest))
                     .willReturn(authReissueResponse);
 
