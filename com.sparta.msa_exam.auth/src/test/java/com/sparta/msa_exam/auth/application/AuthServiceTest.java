@@ -15,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -26,11 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class) // @Nested Class @Order 적용
 @ExtendWith(MockitoExtension.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class) // @Nested Class @Order 적용
 class AuthServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthServiceTest.class);
     @Mock
     UserFeignClient userFeignClient;
 
@@ -51,20 +47,27 @@ class AuthServiceTest {
     @Order(1)
     class SignIn {
 
-        @Test
-        @DisplayName("[성공]")
-        void success() {
-            // given
+        private AuthSignInRequest authSignInRequest;
+        private UserAccountResponse userAccountResponse;
+
+        @BeforeEach
+        void init() {
             Long userId = 1L;
             String username = "username";
             String plainPassword = "plainPassword";
             String hashedPassword = "hashedPassword";
+
+            authSignInRequest = new AuthSignInRequest(username, plainPassword);
+            userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
+        }
+
+        @Test
+        @DisplayName("[성공]")
+        void success() {
+            // given
+            String username = "username";
             String accessToken = "accessToken";
             String refreshToken = "refreshToken";
-
-            AuthSignInRequest authSignInRequest = new AuthSignInRequest(username, plainPassword);
-            UserAccountResponse userAccountResponse
-                    = new UserAccountResponse(userId, authSignInRequest.username(), hashedPassword);
 
             given(userFeignClient.findUserByIdOrdUsername(null, username))
                     .willReturn(userAccountResponse);
@@ -98,15 +101,7 @@ class AuthServiceTest {
         @DisplayName("[실패] - 사용자가 입력한 비밀번호가 암호화된 비밀번호와 일치하지 않는 경우")
         void passwordMismatch() {
             // given
-            Long userId = 1L;
             String username = "username";
-            String plainPassword = "plainPassword";
-            String hashedPassword = "hashedPassword";
-            ExceptionMessage invalidCredentialsException = ExceptionMessage.INVALID_CREDENTIALS;
-
-            AuthSignInRequest authSignInRequest = new AuthSignInRequest(username, plainPassword);
-            UserAccountResponse userAccountResponse
-                    = new UserAccountResponse(userId, authSignInRequest.username(), hashedPassword);
 
             given(userFeignClient.findUserByIdOrdUsername(null, username))
                     .willReturn(userAccountResponse);
@@ -118,8 +113,8 @@ class AuthServiceTest {
                     () -> authService.signIn(authSignInRequest));
 
             // then
-            assertEquals(invalidCredentialsException.getStatus(), exception.getStatus());
-            assertEquals(invalidCredentialsException.getMessage(), exception.getMessage());
+            assertEquals(ExceptionMessage.INVALID_CREDENTIALS.getStatus(), exception.getStatus());
+            assertEquals(ExceptionMessage.INVALID_CREDENTIALS.getMessage(), exception.getMessage());
 
             verify(userFeignClient, times(1))
                     .findUserByIdOrdUsername(null, authSignInRequest.username());
@@ -133,22 +128,31 @@ class AuthServiceTest {
     @Order(2)
     class SignUp {
 
+        private AuthSignUpRequest authSignUpRequest;
+        private UserCreateRequest userCreateRequest;
+        private UserAccountResponse userAccountResponse;
+        private UserCreateResponse userCreateResponse;
+
+        @BeforeEach
+        void init() {
+            Long userId = 1L;
+            String username = "username";
+            String plainPassword = "plain password";
+            String hashedPassword = "hashedPassword";
+
+            authSignUpRequest = new AuthSignUpRequest(username, plainPassword);
+            userCreateRequest = new UserCreateRequest(username, hashedPassword);
+            userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
+            userCreateResponse = new UserCreateResponse(userId);
+        }
+
         @Test
         @DisplayName("[성공]")
         void success() {
             // given
-            Long userId = 1L;
-            String username = "username";
-            String plainPassword = "plainPassword";
             String hashedPassword = "hashedPassword";
             String accessToken = "accessToken";
             String refreshToken = "refreshToken";
-
-            AuthSignUpRequest authSignUpRequest = new AuthSignUpRequest(username, plainPassword);
-            UserCreateRequest userCreateRequest = new UserCreateRequest(authSignUpRequest.username(), hashedPassword);
-
-            UserAccountResponse userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
-            UserCreateResponse userCreateResponse = new UserCreateResponse(userId);
 
             given(passwordEncoder.encode(authSignUpRequest.password()))
                     .willReturn(hashedPassword);
@@ -185,18 +189,26 @@ class AuthServiceTest {
     @Order(3)
     class Reissue {
 
+        private AuthReissueRequest authReissueRequest;
+        private UserAccountResponse userAccountResponse;
+
+        @BeforeEach
+        void init() {
+            Long userId = 1L;
+            String username = "username";
+            String hashedPassword = "hashedPassword";
+            String oldRefreshToken = "old refreshToken";
+
+            authReissueRequest = new AuthReissueRequest(oldRefreshToken);
+            userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
+        }
+
         @Test
         @DisplayName("[성공]")
         void success() {
             // given
             Long userId = 1L;
-            String username = "username";
-            String hashedPassword = "hashedPassword";
             String newAccessToken = "new accessToken";
-            String refreshToken = "refreshToken";
-
-            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
-            UserAccountResponse userAccountResponse = new UserAccountResponse(userId, username, hashedPassword);
 
             given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
                     .willReturn(true);
@@ -227,11 +239,6 @@ class AuthServiceTest {
         @DisplayName("[실패] - 유효하지 않은 refresh token를 전달한 경우")
         void invalidRefreshToken() {
             // given
-            String refreshToken = "refreshToken";
-            ExceptionMessage invalidTokenException = ExceptionMessage.INVALID_TOKEN;
-
-            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
-
             given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
                     .willReturn(false);
 
@@ -243,19 +250,14 @@ class AuthServiceTest {
             verify(jwtProvider, times(1))
                     .validateRefreshToken(authReissueRequest.refreshToken());
 
-            assertEquals(invalidTokenException.getStatus(), exception.getStatus());
-            assertEquals(invalidTokenException.getMessage(), exception.getMessage());
+            assertEquals(ExceptionMessage.INVALID_TOKEN.getStatus(), exception.getStatus());
+            assertEquals(ExceptionMessage.INVALID_TOKEN.getMessage(), exception.getMessage());
         }
 
         @Test
         @DisplayName("[실패] - redis 내 refresh token이 존재하지 않는 경우")
         void notExistsRefreshToken() {
             // given
-            String refreshToken = "refreshToken";
-            ExceptionMessage invalidTokenException = ExceptionMessage.INVALID_TOKEN;
-
-            AuthReissueRequest authReissueRequest = new AuthReissueRequest(refreshToken);
-
             given(jwtProvider.validateRefreshToken(authReissueRequest.refreshToken()))
                     .willReturn(true);
             given(authRedisRepository.getRefreshToken(authReissueRequest.refreshToken()))
@@ -271,8 +273,8 @@ class AuthServiceTest {
             verify(authRedisRepository, times(1))
                     .getRefreshToken(authReissueRequest.refreshToken());
 
-            assertEquals(invalidTokenException.getStatus(), exception.getStatus());
-            assertEquals(invalidTokenException.getMessage(), exception.getMessage());
+            assertEquals(ExceptionMessage.INVALID_TOKEN.getStatus(), exception.getStatus());
+            assertEquals(ExceptionMessage.INVALID_TOKEN.getMessage(), exception.getMessage());
         }
     }
 }
